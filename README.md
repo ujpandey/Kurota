@@ -10,3 +10,5 @@ The group responsible for this project is DUAPC which stands for Douglas Ujjwal
 And Pandey Chikono.
 
 The group members are Douglas Chikono and Ujjwal Pandey.
+
+This project is available under the GPL v2 license.
