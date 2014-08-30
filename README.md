@@ -12,3 +12,5 @@ And Pandey Chikono.
 The group members are Douglas Chikono and Ujjwal Pandey.
 
 This project is available under the GPL v2 license.
+
+This project is primarily written in C++ using SDL, SDL_net and MySQL.
