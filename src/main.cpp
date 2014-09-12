@@ -67,7 +67,7 @@ int main()
                                        SDL_RENDERER_ACCELERATED);
 
     SDL_Surface * player_surface;
-    player_surface = IMG_Load("spritesheet_env.jpg");
+    player_surface = IMG_Load("../assets/chara.png");
     if (!player_surface)
     {
         std::cerr << "Failure opening file: "
@@ -80,7 +80,11 @@ int main()
     player_texture = SDL_CreateTextureFromSurface(main_renderer, player_surface);
     SDL_FreeSurface(player_surface);
     
-    SDL_Rect bg_rect;
+    SDL_Rect bg_rect, fg_rect;
+    bg_rect.x = 10;
+    bg_rect.y = 10;
+    bg_rect.w = 30;
+    bg_rect.h = 30;
 
     SDL_Event event;
 
@@ -106,14 +110,12 @@ int main()
         
         SDL_SetRenderDrawColor(main_renderer, 255, 0, 0, 255);
         
-        bg_rect.x = 50 + i;
-        bg_rect.y = 50 + j;
-        bg_rect.w = 100;
-        bg_rect.h = 100;
-        
-        SDL_RenderFillRect(main_renderer, &bg_rect);
+        fg_rect.x = 50 + i;
+        fg_rect.y = 50 + j;
+        fg_rect.w = 100;
+        fg_rect.h = 100;
 
-        SDL_RenderCopy(main_renderer, player_texture, NULL, NULL);
+        SDL_RenderCopy(main_renderer, player_texture, &bg_rect, &fg_rect);
 
         SDL_RenderPresent(main_renderer);
     }
@@ -123,8 +125,5 @@ int main()
     SDL_DestroyWindow(main_window);
 
     IMG_Quit();
-    SDL_Quit();
-
-    
-    
+    SDL_Quit();    
 }
