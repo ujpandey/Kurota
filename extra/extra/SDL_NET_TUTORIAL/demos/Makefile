@@ -1,6 +1,6 @@
 CFLAGS=-g -O2 -Wall $(shell sdl-config --cflags)
 LDFLAGS=-g -O2 -Wall 
-LDLIBS=$(shell sdl2-config --libs) -lSDL_net
+LDLIBS=$(shell sdl-config --libs) -lSDL_net
 
 PROGRAMS=$(basename $(wildcard *.c))
 
