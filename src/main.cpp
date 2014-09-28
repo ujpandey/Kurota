@@ -12,7 +12,7 @@
  *
  * TODO:
  * - Add an animation class.
- ******************************************************************************/
+ *****************************************************************************/
 
 
 
@@ -22,11 +22,26 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
+#include "Game.h"
+#include "TextureManager.h"
 
 
 int main()
 {
-    // SDL initiation
+    Game * TheGame = new Game();
+    TheGame -> init();
+    
+    while(TheGame -> get_status() != INACTIVE)
+    {
+        TheGame -> handle_events();
+        TheGame -> update();
+        TheGame -> render();
+    }
+    TheGame -> clean();
+
+    return 0;
+
+    /*// SDL initiation
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         std::cerr << "Failure to initialize video: "
@@ -125,5 +140,6 @@ int main()
     SDL_DestroyWindow(main_window);
 
     IMG_Quit();
-    SDL_Quit();    
+    SDL_Quit();
+    */
 }

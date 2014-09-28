@@ -44,10 +44,7 @@ bool Game::init(int lib_flags,
         return false;
     }
     
-    clear_color.r = clear_color_r;
-    clear_color.g = clear_color_g;
-    clear_color.b = clear_color_b;
-    clear_color.a = clear_color_a;
+    set_clear_color(clear_color_r, clear_color_g, clear_color_b, clear_color_a);
 
     status = RUNNING;
     
@@ -97,7 +94,7 @@ void Game::clean()
 }
 
 
-void Game::clear_screen()
+inline void Game::clear_screen()
 {
     SDL_SetRenderDrawColor(renderer, clear_color.r, clear_color.g,
                            clear_color.b, clear_color.a);
@@ -107,7 +104,7 @@ void Game::clear_screen()
 }
 
 
-void Game::set_clear_color(int clear_color_r,
+inline void Game::set_clear_color(int clear_color_r,
                            int clear_color_g,
                            int clear_color_b,
                            int clear_color_a)
@@ -119,22 +116,3 @@ void Game::set_clear_color(int clear_color_r,
     
     return;
 }
-    
-
-int main()
-{
-    Game * TheGame = new Game();
-    TheGame -> init();
-    
-    while(TheGame -> get_status() != INACTIVE)
-    {
-        TheGame -> handle_events();
-        TheGame -> update();
-        TheGame -> render();
-    }
-    TheGame -> clean();
-
-    return 0;
-}
-
-    
