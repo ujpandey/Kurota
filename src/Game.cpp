@@ -9,17 +9,17 @@
 #include "Game.h"
 
 
-bool Game::init(int lib_flags,
-                std::string title,
-                int win_x,
-                int win_y,
-                int win_w,
-                int win_h,
-                int win_flags,
-                int clear_color_r,
-                int clear_color_g,
-                int clear_color_b,
-                int clear_color_a)
+bool Game::init(const int & lib_flags,
+                const std::string & title,
+                const int & win_x,
+                const int & win_y,
+                const int & win_w,
+                const int & win_h,
+                const int & win_flags,
+                const int & clear_color_r,
+                const int & clear_color_g,
+                const int & clear_color_b,
+                const int & clear_color_a)
 {
     if (SDL_Init(lib_flags) != 0)
     {
@@ -32,6 +32,18 @@ bool Game::init(int lib_flags,
     if (window == NULL)
     {
         std::cerr << "Window creation failed: " << SDL_GetError() << std::endl;
+
+        return false;
+    }
+
+    // SDL_image initiation
+    int IMG_flags = IMG_INIT_PNG | IMG_INIT_JPG;
+    int IMG_init_code = IMG_Init(IMG_flags);
+
+    if (IMG_init_code & IMG_flags != IMG_flags)
+    {
+        std::cerr << "SDL_image initiation failed: "
+                  << IMG_GetError() << std::endl;
 
         return false;
     }
@@ -104,10 +116,10 @@ inline void Game::clear_screen()
 }
 
 
-inline void Game::set_clear_color(int clear_color_r,
-                           int clear_color_g,
-                           int clear_color_b,
-                           int clear_color_a)
+inline void Game::set_clear_color(const int & clear_color_r,
+                                  const int & clear_color_g,
+                                  const int & clear_color_b,
+                                  const int & clear_color_a)
 {
     clear_color.r = clear_color_r;
     clear_color.g = clear_color_g;
