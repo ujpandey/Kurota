@@ -8,6 +8,7 @@
 
 
 #include "SDL.h"
+#include "SDL_image.h"
 
 
 enum GameStatus {RUNNING, PAUSED, INACTIVE};

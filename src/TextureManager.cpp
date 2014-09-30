@@ -3,7 +3,7 @@
 
 bool TextureManager::load(const std::string & filename,
                           const std::string & id,
-                          const SDL_Renderer * renderer)
+                          SDL_Renderer * renderer)
 {
     SDL_Surface * tmp = IMG_Load(filename.c_str());
 
@@ -41,8 +41,8 @@ void TextureManager::render(const std::string & id,
                             const int & dest_y,
                             const int & dest_w,
                             const int & dest_h,
-                            const SDL_Renderer * renderer,
-                            const SDL_RenderFlip & flip)
+                            SDL_Renderer * renderer,
+                            const SDL_RendererFlip & flip)
 {
     SDL_Rect src, dest;
     src.x = src_x;
