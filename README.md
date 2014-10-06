@@ -1,7 +1,7 @@
 Kurota
 ======
 
-An open source fantasy online roleplaying game. The name means "Fantasy" in Shona.
+An open source fantasy online roleplaying game. The name means "Fantasy" in Shona, one of the major languages from Zimbawe.
 
 This is a group project for CISS465: Software Engineering taught by
 Dr. Yihsiang Liow for Fall 2014 at Columbia College.
