@@ -9,17 +9,17 @@
 #include "Game.h"
 
 
-bool Game::init(int lib_flags,
-                std::string title,
-                int win_x,
-                int win_y,
-                int win_w,
-                int win_h,
-                int win_flags,
-                int clear_color_r,
-                int clear_color_g,
-                int clear_color_b,
-                int clear_color_a)
+bool Game::init(const int & lib_flags,
+                const std::string & title,
+                const int & win_x,
+                const int & win_y,
+                const int & win_w,
+                const int & win_h,
+                const int & win_flags,
+                const int & clear_color_r,
+                const int & clear_color_g,
+                const int & clear_color_b,
+                const int & clear_color_a)
 {
     if (SDL_Init(lib_flags) != 0)
     {
@@ -36,6 +36,18 @@ bool Game::init(int lib_flags,
         return false;
     }
 
+    // SDL_image initiation
+    int IMG_flags = IMG_INIT_PNG | IMG_INIT_JPG;
+    int IMG_init_code = IMG_Init(IMG_flags);
+
+    if (IMG_init_code & IMG_flags != IMG_flags)
+    {
+        std::cerr << "SDL_image initiation failed: "
+                  << IMG_GetError() << std::endl;
+
+        return false;
+    }
+
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (renderer == NULL)
     {
@@ -44,10 +56,7 @@ bool Game::init(int lib_flags,
         return false;
     }
     
-    clear_color.r = clear_color_r;
-    clear_color.g = clear_color_g;
-    clear_color.b = clear_color_b;
-    clear_color.a = clear_color_a;
+    set_clear_color(clear_color_r, clear_color_g, clear_color_b, clear_color_a);
 
     status = RUNNING;
     
@@ -97,7 +106,7 @@ void Game::clean()
 }
 
 
-void Game::clear_screen()
+inline void Game::clear_screen()
 {
     SDL_SetRenderDrawColor(renderer, clear_color.r, clear_color.g,
                            clear_color.b, clear_color.a);
@@ -107,10 +116,10 @@ void Game::clear_screen()
 }
 
 
-void Game::set_clear_color(int clear_color_r,
-                           int clear_color_g,
-                           int clear_color_b,
-                           int clear_color_a)
+inline void Game::set_clear_color(const int & clear_color_r,
+                                  const int & clear_color_g,
+                                  const int & clear_color_b,
+                                  const int & clear_color_a)
 {
     clear_color.r = clear_color_r;
     clear_color.g = clear_color_g;
@@ -119,22 +128,3 @@ void Game::set_clear_color(int clear_color_r,
     
     return;
 }
-    
-
-int main()
-{
-    Game * TheGame = new Game();
-    TheGame -> init();
-    
-    while(TheGame -> get_status() != INACTIVE)
-    {
-        TheGame -> handle_events();
-        TheGame -> update();
-        TheGame -> render();
-    }
-    TheGame -> clean();
-
-    return 0;
-}
-
-    
