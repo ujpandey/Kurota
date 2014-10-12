@@ -3,11 +3,19 @@
 // Description: Implementation of game controller.
 
 
-#include <iostream>
-
-
 #include "Game.h"
 
+
+Game * Game::instance = NULL;
+
+
+Game * Game::get_instance()
+{
+    if (instance)
+        return instance;
+    instance = new Game;
+    return instance;
+}
 
 bool Game::init(const int & lib_flags,
                 const std::string & title,
@@ -90,7 +98,14 @@ void Game::update()
 void Game::render()
 {
     clear_screen();
+
+    for (std::vector< GameObject * >::iterator it = game_objects.begin();
+         it != game_objects.end(); ++it)
+    {
+        (*it) -> draw(renderer);
+    }
     SDL_RenderPresent(renderer);
+    
 
     return;
 }

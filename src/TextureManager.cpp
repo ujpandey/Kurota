@@ -1,6 +1,18 @@
 #include "TextureManager.h"
 
 
+TextureManager * TextureManager::instance = NULL;
+
+
+TextureManager * TextureManager::get_instance()
+{
+    if (instance)
+        return instance;
+    instance = new TextureManager;
+    return instance;
+}
+
+
 bool TextureManager::load(const std::string & filename,
                           const std::string & id,
                           SDL_Renderer * renderer)

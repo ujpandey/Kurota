@@ -3,12 +3,14 @@
 
 #include <iostream>
 #include <map>
+#include <string>
 #include "SDL.h"
 #include "SDL_image.h"
 
 class TextureManager
 {
 public:
+    static TextureManager * get_instance();
     bool load(const std::string & filename,
               const std::string & id,
               SDL_Renderer * renderer);
@@ -22,9 +24,13 @@ public:
                 const int & dest_w,
                 const int & dest_h,
                 SDL_Renderer * renderer,
-                const SDL_RendererFlip & flip);
-    
+                const SDL_RendererFlip & flip=SDL_FLIP_NONE);
+
+protected:
+    TextureManager(){}
+
 private:
+    static TextureManager * instance;
     std::map< std::string, SDL_Texture * > textures;
 };
 

@@ -7,9 +7,17 @@
 #define GAME_H
 
 
+#include <iostream>
+#include <vector>
+
+
 #include "SDL.h"
 #include "SDL_image.h"
 
+
+#include "GameObject.h"
+
+class GameObject;
 
 enum GameStatus {RUNNING, PAUSED, INACTIVE};
 
@@ -17,9 +25,7 @@ enum GameStatus {RUNNING, PAUSED, INACTIVE};
 class Game
 {
 public:
-    Game(){}
-    ~Game(){}
-
+    static Game * get_instance();
     bool init(const int & lib_flags=SDL_INIT_VIDEO,
               const std::string & title="Kurota!",
               const int & win_x=SDL_WINDOWPOS_CENTERED,
@@ -42,6 +48,9 @@ public:
                          const int & clear_color_a=255);
 
     const GameStatus & get_status() const { return status; }
+
+protected:
+    Game(){}
     
 private:
     GameStatus status;
@@ -49,6 +58,9 @@ private:
     SDL_Window * window;
     SDL_Renderer * renderer;
     SDL_Event event;
+    
+    std::vector< GameObject * > game_objects;
+    static Game * instance;
 };
 
 
