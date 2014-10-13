@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 
 #include "TextureManager.h"
 #include "Game.h"
@@ -10,8 +11,10 @@
 class GameObject
 {
 public:
-    virtual void draw(SDL_Renderer * renderer) = 0;
+    GameObject(){}
+    virtual void draw(SDL_Renderer * renderer) const = 0;
     virtual void update() = 0;
+    virtual std::string serialize() const = 0;
 };
 
 class Player : public GameObject
@@ -21,12 +24,13 @@ public:
            const std::string & texture_file,
            SDL_Renderer * renderer,
            int x=0, int y=0, int w=64, int h=64);
-    void draw(SDL_Renderer * renderer);
+    void draw(SDL_Renderer * renderer) const;
     void update();
+    std::string serialize() const;
 
 private:
-    std::string id;
-    int x, y, w, h;
+    std::string _id;
+    int _x, _y, _w, _h;
 };
 
 #endif

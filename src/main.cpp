@@ -30,6 +30,10 @@ int main()
 {
     Game * TheGame = Game::get_instance();
     TheGame -> init();
+    Player * p1 = new Player("P1", "../assets/male_walkcycle.png",
+                             TheGame -> get_renderer(),
+                             0, 0, 64, 64);
+    TheGame -> register_game_object(p1);
     
     while(TheGame -> get_status() != INACTIVE)
     {

@@ -7,6 +7,7 @@
 #define GAME_H
 
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -17,7 +18,9 @@
 
 #include "GameObject.h"
 
+
 class GameObject;
+
 
 enum GameStatus {RUNNING, PAUSED, INACTIVE};
 
@@ -26,6 +29,7 @@ class Game
 {
 public:
     static Game * get_instance();
+
     bool init(const int & lib_flags=SDL_INIT_VIDEO,
               const std::string & title="Kurota!",
               const int & win_x=SDL_WINDOWPOS_CENTERED,
@@ -46,8 +50,11 @@ public:
                          const int & clear_color_g=255,
                          const int & clear_color_b=255,
                          const int & clear_color_a=255);
-
-    const GameStatus & get_status() const { return status; }
+    void register_game_object(GameObject * g_o);
+    void release_game_object(GameObject * g_o);
+    const GameStatus & get_status() const;
+    void set_status(const GameStatus & status);
+    SDL_Renderer * get_renderer() const;
 
 protected:
     Game(){}

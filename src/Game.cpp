@@ -121,7 +121,7 @@ void Game::clean()
 }
 
 
-inline void Game::clear_screen()
+void Game::clear_screen()
 {
     SDL_SetRenderDrawColor(renderer, clear_color.r, clear_color.g,
                            clear_color.b, clear_color.a);
@@ -131,7 +131,7 @@ inline void Game::clear_screen()
 }
 
 
-inline void Game::set_clear_color(const int & clear_color_r,
+void Game::set_clear_color(const int & clear_color_r,
                                   const int & clear_color_g,
                                   const int & clear_color_b,
                                   const int & clear_color_a)
@@ -142,4 +142,37 @@ inline void Game::set_clear_color(const int & clear_color_r,
     clear_color.a = clear_color_a;
     
     return;
+}
+
+
+void Game::register_game_object(GameObject * g_o)
+{
+    game_objects.push_back(g_o);
+}
+
+
+void Game::release_game_object(GameObject * g_o)
+{
+    std::vector< GameObject * >::iterator it =
+        std::find(game_objects.begin(), game_objects.end(), g_o);
+    if (it != game_objects.end())
+        game_objects.erase(it);
+}
+
+
+const GameStatus & Game::get_status() const
+{
+    return status;
+}
+
+
+void Game::set_status(const GameStatus & s)
+{
+    status = s;
+}
+
+
+SDL_Renderer * Game::get_renderer() const
+{
+    return renderer;
 }
