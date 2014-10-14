@@ -17,6 +17,13 @@ public:
     virtual std::string serialize() const = 0;
 };
 
+class Animation : public GameObject
+{
+public:
+    Animation(const std::string & file,
+              SDL_Renderer * renderer);
+};
+
 class Player : public GameObject
 {
 public:
