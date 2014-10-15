@@ -17,6 +17,7 @@ Game * Game::get_instance()
     return instance;
 }
 
+
 bool Game::init(const int & lib_flags,
                 const std::string & title,
                 const int & win_x,
@@ -92,6 +93,12 @@ void Game::handle_events()
 
 void Game::update()
 {
+    for (std::vector< GameObject * >::iterator it = game_objects.begin();
+         it != game_objects.end(); ++it)
+    {
+        (*it) -> update();
+    }
+    SDL_Delay(300);
 }
 
 

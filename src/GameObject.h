@@ -4,24 +4,17 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <vector>
 
 #include "TextureManager.h"
 #include "Game.h"
-
+    
 class GameObject
 {
 public:
     GameObject(){}
     virtual void draw(SDL_Renderer * renderer) const = 0;
     virtual void update() = 0;
-    virtual std::string serialize() const = 0;
-};
-
-class Animation : public GameObject
-{
-public:
-    Animation(const std::string & file,
-              SDL_Renderer * renderer);
 };
 
 class Player : public GameObject

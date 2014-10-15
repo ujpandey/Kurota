@@ -34,7 +34,6 @@ int main()
                              TheGame -> get_renderer(),
                              0, 0, 64, 64);
     TheGame -> register_game_object(p1);
-    
     while(TheGame -> get_status() != INACTIVE)
     {
         TheGame -> handle_events();

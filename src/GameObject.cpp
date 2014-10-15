@@ -16,7 +16,7 @@ Player::Player(const std::string & id,
 void Player::draw(SDL_Renderer * renderer) const
 {
     TextureManager * tm = TextureManager::get_instance();
-    tm -> render(_id, _x, _y, _w, _h, _x, _y, _w, _h, renderer);
+    tm -> render(_id, 0, 0, _w, _h, _x, _y, _w, _h, renderer);
 }
 
 void Player::update()
