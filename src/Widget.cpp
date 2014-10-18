@@ -96,13 +96,18 @@ CompositeWidget::~CompositeWidget()
 
 void CompositeWidget::draw(SDL_Renderer * renderer) const
 {
+    const SDL_Rect * brect = get_bounds();
+    TextureManager::get_instance() ->
+        render(_id, 0, 0, brect -> w, brect -> h,
+               brect -> x, brect -> y, brect -> w, brect -> h, renderer);
+
+    SDL_RenderSetViewport(Game::get_instance() -> get_renderer(), brect);
     for (std::vector< Widget * >::const_iterator it = _widgets.begin();
          it != _widgets.end(); ++it)
     {
         (*it) -> draw(renderer);
     }
-    
-    SDL_RenderDrawRect(renderer, get_bounds());
+    SDL_RenderSetViewport(Game::get_instance() -> get_renderer(), NULL);
 }
 
 void CompositeWidget::update()
@@ -126,16 +131,47 @@ void CompositeWidget::remove_child(Widget * widget)
 //-----------------------------------------------------------------------------
 // DialogBox
 //-----------------------------------------------------------------------------
-DialogBox(const std::string & id,
-          const std::string & texture_file,
+DialogBox::DialogBox(const std::string & id,
+          const std::string & bg_texture_file,
           SDL_Renderer * renderer,
-          int x=0, int y=0, int w=0, int h=0)
+          int x, int y, int w, int h)
     : CompositeWidget(id)
 {
     _bounding_rect.x = x;
     _bounding_rect.y = y;
-    //TODO
     
+    if (w && h)
+    {
+        _bounding_rect.w = w;
+        _bounding_rect.h = h;
+    }
+    else
+    {
+        SDL_Rect tmp = {x, y, 0, 0};
+        for (std::vector< Widget * >::const_iterator it = _widgets.begin();
+             it != _widgets.end(); ++it)
+        {
+            const SDL_Rect * child = (*it) -> get_bounds();
+            std::cout << child -> x << ' ' << child -> y << ' ' << child -> w
+                      << ' ' << child -> h << std::endl;
+            SDL_UnionRect(&tmp, child, &tmp);
+        }
+        _bounding_rect.w = tmp.w;
+        _bounding_rect.h = tmp.h;
+    }
+
+    std::cout << _bounding_rect.x << ' ' << _bounding_rect.y << ' '
+              << _bounding_rect.w << ' ' << _bounding_rect.h << std::endl;
+    
+    TextureManager::get_instance() -> load(bg_texture_file, id, renderer); 
+}
+
+DialogBox::~DialogBox()
+{}
+
+const SDL_Rect * DialogBox::get_bounds() const
+{
+    return &_bounding_rect;
 }
 
 //-----------------------------------------------------------------------------

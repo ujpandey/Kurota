@@ -42,9 +42,14 @@ int main()
     Button * Register = new Button("Register", "../assets/register.png",
                                   TheGame -> get_renderer(),
                                   150, 20);
+    DialogBox * Splash_dbox = new DialogBox("Splash_dbox",
+                                            "../assets/Splash_dbox.jpg",
+                                            TheGame -> get_renderer(),
+                                            0, 0);
+    Splash_dbox -> add_child(Login);
+    Splash_dbox -> add_child(Register);
     TheGame -> register_game_object(p1);
-    TheGame -> register_game_object(Login);
-    TheGame -> register_game_object(Register);
+    TheGame -> register_game_object(Splash_dbox);
     
     while(TheGame -> get_status() != INACTIVE)
     {

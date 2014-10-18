@@ -55,8 +55,6 @@ public:
 
 protected:
     CompositeWidget(const std::string & id);
-    
-private:
     std::vector< Widget * > _widgets;
 };
 
@@ -64,13 +62,10 @@ class DialogBox : public CompositeWidget
 {
 public:
     DialogBox(const std::string & id,
-              const std::string & texture_file,
+              const std::string & bg_texture_file,
               SDL_Renderer * renderer,
               int x=0, int y=0, int w=0, int h=0);
     virtual ~DialogBox();
-
-    virtual void draw(SDL_Renderer * renderer) const;
-    virtual void update();
     virtual const SDL_Rect * get_bounds() const;
 
 private:
