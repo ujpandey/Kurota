@@ -22,18 +22,30 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
+
+
 #include "Game.h"
 #include "TextureManager.h"
+#include "Widget.h"
 
 
 int main()
 {
     Game * TheGame = Game::get_instance();
     TheGame -> init();
-    Player * p1 = new Player("P1", "../assets/male_walkcycle.png",
+    Player * p1 = new Player("P1", "../assets/warrior.png",
                              TheGame -> get_renderer(),
                              0, 0, 64, 64);
+    Button * Login = new Button("Login", "../assets/login.png",
+                                  TheGame -> get_renderer(),
+                                  20, 20);
+    Button * Register = new Button("Register", "../assets/register.png",
+                                  TheGame -> get_renderer(),
+                                  150, 20);
     TheGame -> register_game_object(p1);
+    TheGame -> register_game_object(Login);
+    TheGame -> register_game_object(Register);
+    
     while(TheGame -> get_status() != INACTIVE)
     {
         TheGame -> handle_events();

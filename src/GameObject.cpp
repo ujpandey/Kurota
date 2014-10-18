@@ -7,16 +7,15 @@ Player::Player(const std::string & id,
                int x, int y, int w, int h)
     : _id(id), _x(x), _y(y), _w(w), _h(h)
 {
-    TextureManager * tm = TextureManager::get_instance();
-    tm -> load(texture_file, id, renderer);
+    TextureManager::get_instance() -> load(texture_file, id, renderer);
     std::cout << _id << std::endl;
 }
 
 
 void Player::draw(SDL_Renderer * renderer) const
 {
-    TextureManager * tm = TextureManager::get_instance();
-    tm -> render(_id, 0, 0, _w, _h, _x, _y, _w, _h, renderer);
+    TextureManager::get_instance() ->
+        render(_id, 0, 0, _w, _h, _x, _y, _w, _h, renderer);
 }
 
 void Player::update()
