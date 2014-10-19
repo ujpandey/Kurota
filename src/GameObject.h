@@ -1,12 +1,6 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <vector>
-
-#include "TextureManager.h"
 #include "Game.h"
     
 class GameObject

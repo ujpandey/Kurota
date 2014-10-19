@@ -9,6 +9,9 @@
 
 #include <algorithm>
 #include <iostream>
+#include <map>
+#include <sstream>
+#include <string>
 #include <vector>
 
 
@@ -17,12 +20,16 @@
 
 
 #include "GameObject.h"
+#include "TextureManager.h"
 
 
 class GameObject;
 
 
 enum GameStatus {RUNNING, PAUSED, INACTIVE};
+
+
+enum Direction {NORTH, EAST, WEST, SOUTH};
 
 
 class Game
@@ -34,8 +41,8 @@ public:
               const std::string & title="Kurota!",
               const int & win_x=SDL_WINDOWPOS_CENTERED,
               const int & win_y=SDL_WINDOWPOS_CENTERED,
-              const int & win_w=800,
-              const int & win_h=600,
+              const int & win_w=1024,
+              const int & win_h=768,
               const int & win_flags=SDL_WINDOW_RESIZABLE,
               const int & clear_color_r=255,
               const int & clear_color_g=255,

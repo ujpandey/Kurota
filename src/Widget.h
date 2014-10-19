@@ -1,11 +1,6 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <vector>
-
 #include "Game.h"
 #include "TextureManager.h"
 
@@ -66,9 +61,14 @@ public:
               SDL_Renderer * renderer,
               int x=0, int y=0, int w=0, int h=0);
     virtual ~DialogBox();
+    virtual void update();
+    virtual void add_child(Widget *);
+    virtual void remove_child(Widget *);
     virtual const SDL_Rect * get_bounds() const;
 
 private:
+    // int _padding; // Gonna assume atomic widgets know their placement.
+    // Direction _add_dir; // Switch to strategy pattern sometime ????
     SDL_Rect _bounding_rect;
 };
 
@@ -85,9 +85,27 @@ public:
 
 protected:
     DecoratorWidget(const std::string & id);
-
-private:
     Widget * _widget;
+};
+
+class Border : public DecoratorWidget
+{
+public:
+    Border(const std::string & id, int width,
+           Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+           
+    virtual ~Border();
+
+    virtual void draw(SDL_Renderer * renderer) const;
+    virtual void update();
+    virtual void add_child(Widget *);
+    virtual void remove_child(Widget *);
+    virtual const SDL_Rect * get_bounds() const;
+    
+private:
+    int _width;
+    SDL_Color _color;
+    SDL_Rect _bounding_rect;
 };
 
 #endif

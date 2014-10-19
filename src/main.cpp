@@ -38,18 +38,21 @@ int main()
                              0, 0, 64, 64);
     Button * Login = new Button("Login", "../assets/login.png",
                                   TheGame -> get_renderer(),
-                                  20, 20);
+                                  10, 20);
     Button * Register = new Button("Register", "../assets/register.png",
-                                  TheGame -> get_renderer(),
-                                  150, 20);
+                                 TheGame -> get_renderer(),
+                                 120, 20);
     DialogBox * Splash_dbox = new DialogBox("Splash_dbox",
-                                            "../assets/Splash_dbox.jpg",
+                                            "../assets/Splash_dbox.png",
                                             TheGame -> get_renderer(),
-                                            0, 0);
+                                            400, 400);
+    Border * Splash_dbox_brdr = new Border("Splash_dbox_brdr",
+                                           10, 0, 64, 71, 255);
     Splash_dbox -> add_child(Login);
     Splash_dbox -> add_child(Register);
+    Splash_dbox_brdr -> add_child(Splash_dbox);
     TheGame -> register_game_object(p1);
-    TheGame -> register_game_object(Splash_dbox);
+    TheGame -> register_game_object(Splash_dbox_brdr);
     
     while(TheGame -> get_status() != INACTIVE)
     {
