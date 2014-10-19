@@ -13,8 +13,8 @@ public:
     void on_mouse_move(SDL_Event & event);
     void on_mouse_button_down(SDL_Event & event);
     void on_mouse_button_up(SDL_Event & event);
-    void on_mouse_button_down(SDL_Event & event);
-    
+    void on_key_down();
+    void on_key_up();    
 
 protected:
     EventHandler(){}
