@@ -38,7 +38,8 @@ private:
     std::string _text;
     bool _focus;
     bool _redraw;
-    SDL_Rect _bounding_rect;   
+    bool _maxed;
+    SDL_Rect _bounding_rect; 
 };
 
 #endif

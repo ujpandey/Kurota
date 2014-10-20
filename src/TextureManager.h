@@ -35,8 +35,9 @@ public:
                       const int & dest_x,
                       const int & dest_y,
                       SDL_Renderer * renderer);
-    void erase(const std::string &id);
+    void erase(const std::string & id);
     void clear();
+    SDL_Texture * get_texture(const std::string & id);
 
 protected:
     TextureManager(){}

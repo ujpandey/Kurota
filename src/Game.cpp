@@ -93,6 +93,7 @@ bool Game::init(const int & lib_flags,
 
 void Game::handle_event()
 {
+    std::cout << "\n\n\n" << std::endl;
     for (std::deque< EventHandler * >::iterator it = event_handlers.begin();
          it != event_handlers.end(); ++it)
         (*it) -> handle_event();

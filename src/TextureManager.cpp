@@ -48,6 +48,8 @@ bool TextureManager::load_text(const std::string & text,
                                const std::string & id,
                                SDL_Renderer * renderer)
 {
+    if (textures[id] != NULL)
+        SDL_DestroyTexture(textures[id]);
     std::string rendered_text = " ";
     TTF_Font * f = Game::get_instance() -> get_font();
     SDL_Color color = {152, 255, 255, 0};
@@ -142,4 +144,9 @@ void TextureManager::clear()
         SDL_DestroyTexture(it -> second);
     }
     textures.clear();
+}
+
+SDL_Texture * TextureManager::get_texture(const std::string & id)
+{
+    return textures[id];
 }

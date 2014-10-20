@@ -106,6 +106,8 @@ void CompositeWidget::update()
 
 void CompositeWidget::add_child(Widget * widget)
 {
+    Game::get_instance() -> coup_event_handle(widget);
+    widget -> set_successor(this);
     _widgets.push_back(widget);
 }
 
@@ -114,7 +116,7 @@ void CompositeWidget::remove_child(Widget * widget)
     std::vector< Widget * >::iterator it =
         std::find(_widgets.begin(), _widgets.end(), widget);
     if (it != _widgets.end())
-        _widgets.erase(it);
+        _widgets.erase(it);   
 }
 
 
@@ -163,7 +165,7 @@ void DialogBox::add_child(Widget * widget)
     _bounding_rect.w += child -> w + (child -> x - _bounding_rect.w) + 10;
     _bounding_rect.h += child -> h + (child -> y - _bounding_rect.h) + 10;
 
-    _widgets.push_back(widget);
+    CompositeWidget::add_child(widget);
 }
 
 void DialogBox::remove_child(Widget * widget)
@@ -205,6 +207,8 @@ void DecoratorWidget::update()
 
 void DecoratorWidget::add_child(Widget * widget)
 {
+    Game::get_instance() -> coup_event_handle(widget);
+    widget -> set_successor(this);
     _widget = widget;
 }
 
@@ -247,7 +251,7 @@ void Border::update()
 
 void Border::add_child(Widget * widget)
 {
-    _widget = widget;
+    DecoratorWidget::add_child(widget);
     const SDL_Rect * tmp = _widget -> get_bounds();
     _bounding_rect.x = tmp -> x - _width;
     _bounding_rect.y = tmp -> y - _width;
