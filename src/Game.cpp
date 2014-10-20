@@ -57,6 +57,14 @@ bool Game::init(const int & lib_flags,
         return false;
     }
 
+    if (TTF_Init() == -1)
+    {
+        std::cerr << "SDL_ttf initiation failed: "
+                  << TTF_GetError() << std::endl;
+        
+        return false;
+    }
+
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (renderer == NULL)
     {
@@ -74,6 +82,8 @@ bool Game::init(const int & lib_flags,
 
         return false;
     }
+
+    SDL_StartTextInput();
     
     status = RUNNING;
     
@@ -81,9 +91,11 @@ bool Game::init(const int & lib_flags,
 }
 
 
-void Game::handle_events()
+void Game::handle_event()
 {
-    EventHandler::get_instance() -> update();
+    for (std::deque< EventHandler * >::iterator it = event_handlers.begin();
+         it != event_handlers.end(); ++it)
+        (*it) -> handle_event();
 }
 
 
@@ -116,6 +128,7 @@ void Game::render()
 
 void Game::clean()
 {
+    TextureManager::get_instance() -> clear();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
@@ -151,6 +164,7 @@ void Game::set_clear_color(const int & clear_color_r,
 void Game::register_game_object(GameObject * g_o)
 {
     game_objects.push_back(g_o);
+    register_event_handler(g_o);
 }
 
 
@@ -160,6 +174,35 @@ void Game::release_game_object(GameObject * g_o)
         std::find(game_objects.begin(), game_objects.end(), g_o);
     if (it != game_objects.end())
         game_objects.erase(it);
+    release_event_handler(g_o);
+}
+
+
+void Game::register_event_handler(EventHandler * e_h)
+{
+    e_h -> set_successor(event_handlers.front());
+    event_handlers.push_front(e_h);
+}
+
+
+void Game::release_event_handler(EventHandler * e_h)
+{
+    std::deque< EventHandler * >::iterator it =
+        std::find(event_handlers.begin(), event_handlers.end(), e_h);
+    if (it != event_handlers.end())
+        event_handlers.erase(it);
+}
+
+
+void Game::coup_event_handle(EventHandler * e_h)
+{
+    event_handlers.push_front(e_h);
+}
+
+
+void Game::free_event_handle()
+{
+    event_handlers.pop_front();
 }
 
 

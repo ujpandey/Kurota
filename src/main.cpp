@@ -41,6 +41,7 @@ int main()
     Button * Register = new Button("Register", "../assets/register.png",
                                  TheGame -> get_renderer(),
                                  120, 20);
+    TextBox * Player_info_box = new TextBox("Player_info_box", "", 10, 0, 16, 16);
     DialogBox * Splash_dbox = new DialogBox("Splash_dbox",
                                             "../assets/Splash_dbox.png",
                                             TheGame -> get_renderer(),
@@ -57,7 +58,7 @@ int main()
     
     while(TheGame -> get_status() != INACTIVE)
     {
-        TheGame -> handle_events();
+        TheGame -> handle_event();
         TheGame -> update();
         TheGame -> render();
     }

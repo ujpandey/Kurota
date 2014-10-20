@@ -24,6 +24,17 @@ public:
                 const int & dest_h,
                 SDL_Renderer * renderer,
                 const SDL_RendererFlip & flip=SDL_FLIP_NONE);
+    void render_whole(const std::string & id,
+                      const int & dest_x,
+                      const int & dest_y,
+                      const int & dest_w,
+                      const int & dest_h,
+                      SDL_Renderer * renderer,
+                      const SDL_RendererFlip & flip=SDL_FLIP_NONE);
+    void render_as_is(const std::string & id,
+                      const int & dest_x,
+                      const int & dest_y,
+                      SDL_Renderer * renderer);
     void erase(const std::string &id);
     void clear();
 

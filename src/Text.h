@@ -28,6 +28,9 @@ public:
     ~TextBox();
     
     virtual void draw(SDL_Renderer * renderer) const;
+    virtual void on_mouse_button_down();
+    virtual void on_key_down();
+    virtual void on_text_input();
     virtual void update();
     virtual const SDL_Rect * get_bounds() const;
 

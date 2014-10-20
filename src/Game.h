@@ -7,22 +7,13 @@
 #define GAME_H
 
 
-#include <algorithm>
-#include <iostream>
-#include <map>
-#include <sstream>
-#include <string>
-#include <vector>
-
-
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
-
-
-#include "EventHandler.h"
+#include "Includes.h"
 #include "GameObject.h"
 #include "TextureManager.h"
+
+
+class EventHandler;
+class GameObject;
 
 
 SDL_FORCE_INLINE SDL_bool SDL_PointInRect(const SDL_Point *p, const SDL_Rect *r)
@@ -30,9 +21,6 @@ SDL_FORCE_INLINE SDL_bool SDL_PointInRect(const SDL_Point *p, const SDL_Rect *r)
     return ( (p->x >= r->x) && (p->x < (r->x + r->w)) &&
              (p->y >= r->y) && (p->y < (r->y + r->h)) ) ? SDL_TRUE : SDL_FALSE;
 }
-
-
-class GameObject;
 
 
 enum GameStatus {RUNNING, PAUSED, INACTIVE};
@@ -57,7 +45,7 @@ public:
               const int & clear_color_g=255,
               const int & clear_color_b=255,
               const int & clear_color_a=255);
-    void handle_events();
+    void handle_event();
     void update();
     void render();
     void clean();
@@ -68,6 +56,10 @@ public:
                          const int & clear_color_a=255);
     void register_game_object(GameObject * g_o);
     void release_game_object(GameObject * g_o);
+    void register_event_handler(EventHandler * e_h);
+    void release_event_handler(EventHandler * e_h);
+    void coup_event_handle(EventHandler * e_h);
+    void free_event_handle();
     const GameStatus & get_status() const;
     void set_status(const GameStatus & status);
     SDL_Renderer * get_renderer() const;
@@ -82,7 +74,8 @@ private:
     SDL_Window * window;
     SDL_Renderer * renderer;
     TTF_Font * font;
-    
+
+    std::deque< EventHandler * > event_handlers; 
     std::vector< GameObject * > game_objects;
     static Game * instance;
 };

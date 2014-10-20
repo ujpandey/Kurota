@@ -48,35 +48,34 @@ bool TextureManager::load_text(const std::string & text,
                                const std::string & id,
                                SDL_Renderer * renderer)
 {
+    std::string rendered_text = " ";
     TTF_Font * f = Game::get_instance() -> get_font();
     SDL_Color color = {152, 255, 255, 0};
     if (text.length() > 0)
     {
-        SDL_Surface * tmp = TTF_RenderText_Solid(f, text.c_str(), color);
-        if (!tmp)
-        {
-            std::cerr << "Failure loading text: "
-                      << TTF_GetError() << std::endl;
-            
-            return false;
-        }
-        SDL_Texture * new_texture = SDL_CreateTextureFromSurface(renderer, tmp);
-        SDL_FreeSurface(tmp);
-
-        if (!new_texture)
-        {
-            std::cerr << "Failure loading texture: "
-                      << SDL_GetError() << std::endl;
-            
-            return false;
-        }
-
-        textures[id] = new_texture;
-
-        return true;
+        rendered_text = text;
     }
-    textures[id] = NULL;
-    
+    SDL_Surface * tmp = TTF_RenderText_Solid(f, rendered_text.c_str(), color);
+    if (!tmp)
+    {
+        std::cerr << "Failure loading text: "
+                  << TTF_GetError() << std::endl;
+            
+        return false;
+    }
+    SDL_Texture * new_texture = SDL_CreateTextureFromSurface(renderer, tmp);
+    SDL_FreeSurface(tmp);
+
+    if (!new_texture)
+    {
+        std::cerr << "Failure loading texture: "
+                  << SDL_GetError() << std::endl;
+            
+        return false;
+    }
+
+    textures[id] = new_texture;
+
     return true;
 }
 
@@ -103,6 +102,30 @@ void TextureManager::render(const std::string & id,
     dest.h = dest_h;
 
     SDL_RenderCopyEx(renderer, textures[id], &src, &dest, 0, 0, flip);    
+}
+
+void TextureManager::render_whole(const std::string & id,
+                                  const int & dest_x,
+                                  const int & dest_y,
+                                  const int & dest_w,
+                                  const int & dest_h,
+                                  SDL_Renderer * renderer,
+                                  const SDL_RendererFlip & flip)
+{
+    SDL_Rect dest = {dest_x, dest_y, dest_w, dest_h};
+    
+    SDL_RenderCopyEx(renderer, textures[id], NULL, &dest, 0, 0, flip);
+}
+
+void TextureManager::render_as_is(const std::string & id,
+                                  const int & dest_x,
+                                  const int & dest_y,
+                                  SDL_Renderer * renderer)
+{
+    int w, h;
+    SDL_QueryTexture(textures[id], NULL, NULL, &w, &h);
+    SDL_Rect dest = {dest_x, dest_y, w, h};
+    SDL_RenderCopy(renderer, textures[id], NULL, &dest);
 }
 
 void TextureManager::erase(const std::string & id)
