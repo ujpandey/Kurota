@@ -2,6 +2,7 @@
 #define INCLUDES_H
 
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <sstream>
