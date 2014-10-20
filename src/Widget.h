@@ -11,8 +11,6 @@ public:
     
     virtual void draw(SDL_Renderer * renderer) const;
     virtual void update();
-    virtual void add_child(Widget * widget);
-    virtual void remove_child(Widget * widget);
     virtual const SDL_Rect * get_bounds() const = 0;
     
 protected:

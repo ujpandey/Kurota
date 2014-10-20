@@ -44,6 +44,42 @@ bool TextureManager::load(const std::string & filename,
 }
 
 
+bool TextureManager::load_text(const std::string & text,
+                               const std::string & id,
+                               SDL_Renderer * renderer)
+{
+    TTF_Font * f = Game::get_instance() -> get_font();
+    SDL_Color color = {152, 255, 255, 0};
+    if (text.length() > 0)
+    {
+        SDL_Surface * tmp = TTF_RenderText_Solid(f, text.c_str(), color);
+        if (!tmp)
+        {
+            std::cerr << "Failure loading text: "
+                      << TTF_GetError() << std::endl;
+            
+            return false;
+        }
+        SDL_Texture * new_texture = SDL_CreateTextureFromSurface(renderer, tmp);
+        SDL_FreeSurface(tmp);
+
+        if (!new_texture)
+        {
+            std::cerr << "Failure loading texture: "
+                      << SDL_GetError() << std::endl;
+            
+            return false;
+        }
+
+        textures[id] = new_texture;
+
+        return true;
+    }
+    textures[id] = NULL;
+    
+    return true;
+}
+
 void TextureManager::render(const std::string & id,
                             const int & src_x,
                             const int & src_y,
@@ -67,4 +103,20 @@ void TextureManager::render(const std::string & id,
     dest.h = dest_h;
 
     SDL_RenderCopyEx(renderer, textures[id], &src, &dest, 0, 0, flip);    
+}
+
+void TextureManager::erase(const std::string & id)
+{
+    SDL_DestroyTexture(textures[id]);
+    textures.erase(id);
+}
+
+void TextureManager::clear()
+{
+    for (std::map< std::string, SDL_Texture * >::iterator it = textures.begin();
+         it != textures.end(); ++it)
+    {
+        SDL_DestroyTexture(it -> second);
+    }
+    textures.clear();
 }

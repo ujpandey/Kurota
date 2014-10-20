@@ -10,6 +10,9 @@ public:
     bool load(const std::string & filename,
               const std::string & id,
               SDL_Renderer * renderer);
+    bool load_text(const std::string & text,
+                   const std::string & id,
+                   SDL_Renderer * renderer);
     void render(const std::string & id,
                 const int & src_x,
                 const int & src_y,
@@ -21,6 +24,8 @@ public:
                 const int & dest_h,
                 SDL_Renderer * renderer,
                 const SDL_RendererFlip & flip=SDL_FLIP_NONE);
+    void erase(const std::string &id);
+    void clear();
 
 protected:
     TextureManager(){}

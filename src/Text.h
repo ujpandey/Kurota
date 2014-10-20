@@ -23,8 +23,19 @@ class TextBox : public Widget
 {
 public:
     TextBox(const std::string & id,
-            const std::string & font_file,
-            SDL_Renderer * renderer,
-            int x=0, int y=0, int w=0, int h=0,
-            const std::string & text);
-}
+            const std::string & text="",
+            int x=0, int y=0, int w=0, int h=0);
+    ~TextBox();
+    
+    virtual void draw(SDL_Renderer * renderer) const;
+    virtual void update();
+    virtual const SDL_Rect * get_bounds() const;
+
+private:
+    std::string _text;
+    bool _focus;
+    bool _redraw;
+    SDL_Rect _bounding_rect;   
+};
+
+#endif

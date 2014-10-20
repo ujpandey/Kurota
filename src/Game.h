@@ -17,10 +17,19 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
+#include "SDL_ttf.h"
 
 
+#include "EventHandler.h"
 #include "GameObject.h"
 #include "TextureManager.h"
+
+
+SDL_FORCE_INLINE SDL_bool SDL_PointInRect(const SDL_Point *p, const SDL_Rect *r)
+{
+    return ( (p->x >= r->x) && (p->x < (r->x + r->w)) &&
+             (p->y >= r->y) && (p->y < (r->y + r->h)) ) ? SDL_TRUE : SDL_FALSE;
+}
 
 
 class GameObject;
@@ -62,6 +71,7 @@ public:
     const GameStatus & get_status() const;
     void set_status(const GameStatus & status);
     SDL_Renderer * get_renderer() const;
+    TTF_Font * get_font() const;
 
 protected:
     Game(){}
@@ -71,7 +81,7 @@ private:
     SDL_Color clear_color;
     SDL_Window * window;
     SDL_Renderer * renderer;
-    SDL_Event event;
+    TTF_Font * font;
     
     std::vector< GameObject * > game_objects;
     static Game * instance;

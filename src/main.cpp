@@ -25,8 +25,7 @@
 
 
 #include "Game.h"
-#include "TextureManager.h"
-#include "Widget.h"
+#include "Text.h"
 
 
 int main()
@@ -48,11 +47,13 @@ int main()
                                             400, 400);
     Border * Splash_dbox_brdr = new Border("Splash_dbox_brdr",
                                            10, 0, 64, 71, 255);
+    TextBox * Chat_box = new TextBox("Chat_box", "", 0, 0, 200, 200);
     Splash_dbox -> add_child(Login);
     Splash_dbox -> add_child(Register);
     Splash_dbox_brdr -> add_child(Splash_dbox);
     TheGame -> register_game_object(p1);
     TheGame -> register_game_object(Splash_dbox_brdr);
+    TheGame -> register_game_object(Chat_box);
     
     while(TheGame -> get_status() != INACTIVE)
     {

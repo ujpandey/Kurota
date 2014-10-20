@@ -20,16 +20,6 @@ void Widget::update()
 {
 }
 
-void Widget::add_child(Widget * widget)
-{
-    std::cerr << "Basic menu items can't have children." << std::endl;
-}
-
-void Widget::remove_child(Widget * widget)
-{
-    std::cerr << "Basic menu items can't have children." << std::endl;
-}
-
 
 //-----------------------------------------------------------------------------
 // Button

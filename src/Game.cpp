@@ -67,6 +67,14 @@ bool Game::init(const int & lib_flags,
     
     set_clear_color(clear_color_r, clear_color_g, clear_color_b, clear_color_a);
 
+    font = TTF_OpenFont("../assets/arial.ttf", 28);
+    if (font == NULL)
+    {
+        std::cerr << "Font not loaded: " << TTF_GetError() << std::endl;
+
+        return false;
+    }
+    
     status = RUNNING;
     
     return true;
@@ -75,19 +83,7 @@ bool Game::init(const int & lib_flags,
 
 void Game::handle_events()
 {
-    while (SDL_PollEvent(&event))
-    {
-        switch (event.type)
-        {
-            case SDL_QUIT:
-                status = INACTIVE;
-                break;
-            default:
-                break;
-        }
-    }
-
-    return;
+    EventHandler::get_instance() -> update();
 }
 
 
@@ -98,7 +94,7 @@ void Game::update()
     {
         (*it) -> update();
     }
-    SDL_Delay(300);
+    SDL_Delay(30);
 }
 
 
@@ -182,4 +178,9 @@ void Game::set_status(const GameStatus & s)
 SDL_Renderer * Game::get_renderer() const
 {
     return renderer;
+}
+
+TTF_Font * Game::get_font() const
+{
+    return font;
 }
