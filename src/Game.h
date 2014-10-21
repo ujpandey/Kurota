@@ -47,7 +47,7 @@ public:
               const int & clear_color_a=255);
     void handle_event();
     void update();
-    void render();
+    void draw();
     void clean();
     void clear_screen();
     void set_clear_color(const int & clear_color_r=255,

@@ -5,7 +5,7 @@
 // Widget
 //-----------------------------------------------------------------------------
 Widget::Widget(const std::string & id)
-    : _id(id)
+    : GameObject(id)
 {}
 
 Widget::~Widget()
@@ -165,7 +165,9 @@ void DialogBox::add_child(Widget * widget)
     _bounding_rect.w += child -> w + (child -> x - _bounding_rect.w) + 10;
     _bounding_rect.h += child -> h + (child -> y - _bounding_rect.h) + 10;
 
-    CompositeWidget::add_child(widget);
+    Game::get_instance() -> coup_event_handle(widget);
+    widget -> set_successor(this);
+    _widgets.push_back(widget);
 }
 
 void DialogBox::remove_child(Widget * widget)
@@ -251,13 +253,15 @@ void Border::update()
 
 void Border::add_child(Widget * widget)
 {
-    DecoratorWidget::add_child(widget);
-    const SDL_Rect * tmp = _widget -> get_bounds();
+    const SDL_Rect * tmp = widget -> get_bounds();
     _bounding_rect.x = tmp -> x - _width;
     _bounding_rect.y = tmp -> y - _width;
     _bounding_rect.w = tmp -> w + _width + _width;
     _bounding_rect.h = tmp -> h + _width + _width;
-    
+
+    Game::get_instance() -> coup_event_handle(widget);
+    widget -> set_successor(this);
+    _widget = widget;
 }
 
 void Border::remove_child(Widget * widget)

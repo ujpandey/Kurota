@@ -15,7 +15,6 @@ public:
     
 protected:
     Widget(const std::string & id);
-    std::string _id;
 };
 
 class Button : public Widget

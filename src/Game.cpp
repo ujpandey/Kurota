@@ -96,7 +96,9 @@ void Game::handle_event()
     std::cout << "\n\n\n" << std::endl;
     for (std::deque< EventHandler * >::iterator it = event_handlers.begin();
          it != event_handlers.end(); ++it)
+    {
         (*it) -> handle_event();
+    }
 }
 
 
@@ -111,7 +113,7 @@ void Game::update()
 }
 
 
-void Game::render()
+void Game::draw()
 {
     clear_screen();
 

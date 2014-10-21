@@ -49,19 +49,21 @@ int main()
     Border * Splash_dbox_brdr = new Border("Splash_dbox_brdr",
                                            10, 0, 64, 71, 255);
     TextBox * Chat_box = new TextBox("Chat_box", "", 0, 0, 200, 30);
+    
     TheGame -> register_game_object(p1);
     TheGame -> register_game_object(Splash_dbox_brdr);
     TheGame -> register_game_object(Chat_box);
+
+    Splash_dbox_brdr -> add_child(Splash_dbox);
     Splash_dbox -> add_child(Player_info_box);
     Splash_dbox -> add_child(Login);
     Splash_dbox -> add_child(Register);
-    Splash_dbox_brdr -> add_child(Splash_dbox);
     
     while(TheGame -> get_status() != INACTIVE)
     {
         TheGame -> handle_event();
         TheGame -> update();
-        TheGame -> render();
+        TheGame -> draw();
     }
     TheGame -> clean();
 
