@@ -56,6 +56,7 @@ void EventHandler::on_mouse_move()
 {
     if (_successor != NULL)
     {
+        std::cout << "HI!" << std::endl;
         _successor -> on_mouse_move();
     }
 }
