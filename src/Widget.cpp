@@ -158,12 +158,14 @@ void DialogBox::add_child(Widget * widget)
         case WEST:
             tmp.w += _padding;
     }
-    */
+    
 
     const SDL_Rect * child = widget -> get_bounds();
     
     _bounding_rect.w += child -> w + (child -> x - _bounding_rect.w) + 10;
     _bounding_rect.h += child -> h + (child -> y - _bounding_rect.h) + 10;
+
+    */
 
     Game::get_instance() -> coup_event_handle(widget);
     widget -> set_successor(this);
