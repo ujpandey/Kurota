@@ -67,6 +67,17 @@ const SDL_Rect * Button::get_bounds() const
     return &_bounding_rect;
 }
 
+void Button::set_bounds(const int & x,
+                        const int & y,
+                        const int & w,
+                        const int & h)
+{
+    _bounding_rect.x = x;
+    _bounding_rect.y = y;
+    _bounding_rect.w = w;
+    _bounding_rect.h = h;
+}
+
 
 //-----------------------------------------------------------------------------
 // CompositeWidget
@@ -91,21 +102,32 @@ void CompositeWidget::draw(SDL_Renderer * renderer) const
         render(_id, 0, 0, brect -> w, brect -> h,
                brect -> x, brect -> y, brect -> w, brect -> h, renderer);
 
-    SDL_RenderSetViewport(Game::get_instance() -> get_renderer(), brect);
+    // SDL_RenderSetViewport(Game::get_instance() -> get_renderer(), brect);
     for (std::vector< Widget * >::const_iterator it = _widgets.begin();
          it != _widgets.end(); ++it)
     {
         (*it) -> draw(renderer);
     }
-    SDL_RenderSetViewport(Game::get_instance() -> get_renderer(), NULL);
+    //SDL_RenderSetViewport(Game::get_instance() -> get_renderer(), NULL);
 }
 
 void CompositeWidget::update()
 {
+    for (std::vector< Widget * >::const_iterator it = _widgets.begin();
+         it != _widgets.end(); ++it)
+    {
+        (*it) -> update();
+    }
 }
 
 void CompositeWidget::add_child(Widget * widget)
 {
+    const SDL_Rect * brect = get_bounds();
+    const SDL_Rect * child_brect = widget -> get_bounds();
+    widget -> set_bounds(brect -> x + child_brect -> x,
+                         brect -> y + child_brect -> y,
+                         child_brect -> w,
+                         child_brect -> h);
     EventManager::get_instance() -> release(this);
     EventManager::get_instance() -> lease(widget);
     widget -> set_successor(this);
@@ -143,10 +165,15 @@ DialogBox::~DialogBox()
 
 void DialogBox::update()
 {
+    for (std::vector< Widget * >::const_iterator it = _widgets.begin();
+         it != _widgets.end(); ++it)
+    {
+        (*it) -> update();
+    }
 }
 
 // Gonna assume we won't be doing any auto sizing etc.
-  void DialogBox::add_child(Widget * widget)
+void DialogBox::add_child(Widget * widget)
 {
     /*
     SDL_Rect tmp = _bounding_rect;
@@ -167,7 +194,12 @@ void DialogBox::update()
     _bounding_rect.w += child -> w + (child -> x - _bounding_rect.w) + 10;
     _bounding_rect.h += child -> h + (child -> y - _bounding_rect.h) + 10;
     */
-    
+    const SDL_Rect * brect = get_bounds();
+    const SDL_Rect * child_brect = widget -> get_bounds();
+    widget -> set_bounds(brect -> x + child_brect -> x,
+                         brect -> y + child_brect -> y,
+                         child_brect -> w,
+                         child_brect -> h);
     EventManager::get_instance() -> release(this);
     EventManager::get_instance() -> lease(widget);
     widget -> set_successor(this);
@@ -186,6 +218,17 @@ void DialogBox::remove_child(Widget * widget)
 const SDL_Rect * DialogBox::get_bounds() const
 {
     return &_bounding_rect;
+}
+
+void DialogBox::set_bounds(const int & x,
+                        const int & y,
+                        const int & w,
+                        const int & h)
+{
+    _bounding_rect.x = x;
+    _bounding_rect.y = y;
+    _bounding_rect.w = w;
+    _bounding_rect.h = h;
 }
 
 
@@ -209,6 +252,7 @@ void DecoratorWidget::draw(SDL_Renderer * renderer) const
 
 void DecoratorWidget::update()
 {
+    _widget -> update();
 }
 
 void DecoratorWidget::add_child(Widget * widget)
@@ -254,6 +298,7 @@ void Border::draw(SDL_Renderer * renderer) const
 
 void Border::update()
 {
+    _widget -> update();
 }
 
 void Border::add_child(Widget * widget)
@@ -279,3 +324,15 @@ const SDL_Rect * Border::get_bounds() const
 {
     return &_bounding_rect;
 }
+
+void Border::set_bounds(const int & x,
+                        const int & y,
+                        const int & w,
+                        const int & h)
+{
+    _bounding_rect.x = x;
+    _bounding_rect.y = y;
+    _bounding_rect.w = w;
+    _bounding_rect.h = h;
+}
+

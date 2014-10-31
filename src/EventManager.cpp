@@ -33,6 +33,11 @@ void EventManager::pop()
     event_handlers.pop_back();
 }
 
+void EventManager::clear()
+{
+    event_handlers.clear();
+}
+
 void EventManager::handle_event()
 {
     while (SDL_PollEvent(&_event))

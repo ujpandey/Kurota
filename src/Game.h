@@ -9,21 +9,13 @@
 
 #include "Includes.h"
 #include "EventManager.h"
-#include "GameObject.h"
+#include "GameState.h"
 #include "TextureManager.h"
 
 
+class GameStateManager;
+
 class GameObject;
-
-
-SDL_FORCE_INLINE SDL_bool SDL_PointInRect(const SDL_Point *p, const SDL_Rect *r)
-{
-    return ( (p->x >= r->x) && (p->x < (r->x + r->w)) &&
-             (p->y >= r->y) && (p->y < (r->y + r->h)) ) ? SDL_TRUE : SDL_FALSE;
-}
-
-
-enum GameStatus {RUNNING, PAUSED, INACTIVE};
 
 
 enum Direction {NORTH, EAST, WEST, SOUTH};
@@ -60,8 +52,7 @@ public:
     void register_game_object(GameObject * g_o);
     void release_game_object(GameObject * g_o);
 
-    const GameStatus & get_status() const;
-    void set_status(const GameStatus & status);
+    const GameStateManager * get_state_manager() const;
     SDL_Renderer * get_renderer() const;
     TTF_Font * get_font() const;
 
@@ -69,13 +60,11 @@ protected:
     Game();
     
 private:
-    GameStatus status;
+    GameStateManager * game_state_manager;
     SDL_Color clear_color;
     SDL_Window * window;
     SDL_Renderer * renderer;
     TTF_Font * font;
-
-    std::vector< GameObject * > game_objects;
     static Game * instance;
 };
 

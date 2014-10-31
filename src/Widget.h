@@ -12,6 +12,10 @@ public:
     virtual void draw(SDL_Renderer * renderer) const;
     virtual void update();
     virtual const SDL_Rect * get_bounds() const = 0;
+    virtual void set_bounds(const int & x,
+                            const int & y,
+                            const int & w,
+                            const int & h) = 0;
     
 protected:
     Widget(const std::string & id);
@@ -29,6 +33,10 @@ public:
     virtual void draw(SDL_Renderer * renderer) const;
     virtual void update();
     virtual const SDL_Rect * get_bounds() const;
+    virtual void set_bounds(const int & x,
+                            const int & y,
+                            const int & w,
+                            const int & h);
     
 private:
     SDL_Rect _bounding_rect;
@@ -44,7 +52,11 @@ public:
     virtual void add_child(Widget *);
     virtual void remove_child(Widget *);
     virtual const SDL_Rect * get_bounds() const = 0;
-
+    virtual void set_bounds(const int & x,
+                            const int & y,
+                            const int & w,
+                            const int & h) = 0;
+    
 protected:
     CompositeWidget(const std::string & id);
     std::vector< Widget * > _widgets;
@@ -62,6 +74,10 @@ public:
     virtual void add_child(Widget *);
     virtual void remove_child(Widget *);
     virtual const SDL_Rect * get_bounds() const;
+    virtual void set_bounds(const int & x,
+                            const int & y,
+                            const int & w,
+                            const int & h);
 
 private:
     // int _padding; // Gonna assume atomic widgets know their placement.
@@ -79,7 +95,10 @@ public:
     virtual void add_child(Widget *);
     virtual void remove_child(Widget *);
     virtual const SDL_Rect * get_bounds() const = 0;
-
+    virtual void set_bounds(const int & x,
+                            const int & y,
+                            const int & w,
+                            const int & h) = 0;
 protected:
     DecoratorWidget(const std::string & id);
     Widget * _widget;
@@ -98,7 +117,10 @@ public:
     virtual void add_child(Widget *);
     virtual void remove_child(Widget *);
     virtual const SDL_Rect * get_bounds() const;
-    
+    virtual void set_bounds(const int & x,
+                            const int & y,
+                            const int & w,
+                            const int & h);
 private:
     int _width;
     SDL_Color _color;

@@ -11,7 +11,9 @@ Game * Game::instance = NULL;
 
 Game::Game()
     : EventHandler("Game") 
-{}
+{
+    game_state_manager = new GameStateManager;
+}
 
 
 Game * Game::get_instance()
@@ -110,12 +112,7 @@ void Game::handle_event()
 
 void Game::update()
 {
-    for (std::vector< GameObject * >::iterator it = game_objects.begin();
-         it != game_objects.end(); ++it)
-    {
-        (*it) -> update();
-    }
-    SDL_Delay(30);
+    game_state_manager -> update();
 }
 
 
@@ -123,13 +120,9 @@ void Game::draw()
 {
     clear_screen();
 
-    for (std::vector< GameObject * >::iterator it = game_objects.begin();
-         it != game_objects.end(); ++it)
-    {
-        (*it) -> draw(renderer);
-    }
-    SDL_RenderPresent(renderer);
+    game_state_manager -> draw();
     
+    SDL_RenderPresent(renderer);
 
     return;
 }
@@ -172,19 +165,13 @@ void Game::set_clear_color(const int & clear_color_r,
 
 void Game::register_game_object(GameObject * g_o)
 {
-    game_objects.push_back(g_o);
-    g_o -> set_successor(this);
-    EventManager::get_instance() -> lease(g_o);
+    game_state_manager -> register_game_object(g_o);
 }
 
 
 void Game::release_game_object(GameObject * g_o)
 {
-    std::vector< GameObject * >::iterator it =
-        std::find(game_objects.begin(), game_objects.end(), g_o);
-    if (it != game_objects.end())
-        game_objects.erase(it);
-    EventManager::get_instance() -> release(g_o);
+    game_state_manager -> release_game_object(g_o);
 }
 
 

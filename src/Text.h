@@ -33,7 +33,11 @@ public:
     virtual void on_text_input();
     virtual void update();
     virtual const SDL_Rect * get_bounds() const;
-
+    virtual void set_bounds(const int & x,
+                            const int & y,
+                            const int & w,
+                            const int & h);
+    
 private:
     std::string _text;
     bool _focus;

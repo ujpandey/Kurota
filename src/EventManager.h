@@ -12,6 +12,7 @@ public:
     void release(EventHandler * e_h);
     void coup(EventHandler * e_h);
     void pop();
+    void clear();
     void handle_event();
 
 protected:

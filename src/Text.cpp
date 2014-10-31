@@ -21,7 +21,7 @@ void TextBox::draw(SDL_Renderer * renderer) const
 {
     Uint8 r, g, b, a;
     SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 123, 117, 158, 255);
     SDL_RenderFillRect(renderer, get_bounds());
     SDL_SetRenderDrawColor(renderer, r, g, b, a);
     TextureManager * tm = TextureManager::get_instance();
@@ -36,6 +36,7 @@ void TextBox::on_mouse_button_down()
               << _bounding_rect.w << ' ' << _bounding_rect.h << std::endl;
     if (SDL_PointInRect(&p, get_bounds()))
     {
+        std::cout << "hmm" << std::endl;
         _focus = true;
     }
     else
@@ -65,6 +66,7 @@ void TextBox::on_text_input()
 {
     if (_focus && !_maxed)
     {
+        std::cout << _redraw << std::endl;
         _text += _event -> text.text;
         _redraw = true;
     }
@@ -78,6 +80,7 @@ void TextBox::update()
 {
     if (_redraw)
     {
+        std::cout << _text << std::endl;
         TextureManager * tm = TextureManager::get_instance();
         tm -> load_text(_text, _id, Game::get_instance() -> get_renderer());
         int w, h;
@@ -85,10 +88,12 @@ void TextBox::update()
         if (w > _bounding_rect.w)
         {
             _text.erase(_text.end() - 1);
+            tm -> load_text(_text, _id, Game::get_instance() -> get_renderer());
             _maxed = true;
         }
         else
             _maxed = false;
+        _redraw = false;
 //         if (h > _bounding_rect.h - 28)
 //             _maxed_h = true;
     }
@@ -97,4 +102,15 @@ void TextBox::update()
 const SDL_Rect * TextBox::get_bounds() const
 {
     return &_bounding_rect;
+}
+
+void TextBox::set_bounds(const int & x,
+                        const int & y,
+                        const int & w,
+                        const int & h)
+{
+    _bounding_rect.x = x;
+    _bounding_rect.y = y;
+    _bounding_rect.w = w;
+    _bounding_rect.h = h;
 }
