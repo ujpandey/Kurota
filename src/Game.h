@@ -8,11 +8,11 @@
 
 
 #include "Includes.h"
+#include "EventManager.h"
 #include "GameObject.h"
 #include "TextureManager.h"
 
 
-class EventHandler;
 class GameObject;
 
 
@@ -29,7 +29,7 @@ enum GameStatus {RUNNING, PAUSED, INACTIVE};
 enum Direction {NORTH, EAST, WEST, SOUTH};
 
 
-class Game
+class Game : public EventHandler
 {
 public:
     static Game * get_instance();
@@ -45,6 +45,8 @@ public:
               const int & clear_color_g=255,
               const int & clear_color_b=255,
               const int & clear_color_a=255);
+
+    void on_quit();
     void handle_event();
     void update();
     void draw();
@@ -54,19 +56,17 @@ public:
                          const int & clear_color_g=255,
                          const int & clear_color_b=255,
                          const int & clear_color_a=255);
+
     void register_game_object(GameObject * g_o);
     void release_game_object(GameObject * g_o);
-    void register_event_handler(EventHandler * e_h);
-    void release_event_handler(EventHandler * e_h);
-    void coup_event_handle(EventHandler * e_h);
-    void free_event_handle();
+
     const GameStatus & get_status() const;
     void set_status(const GameStatus & status);
     SDL_Renderer * get_renderer() const;
     TTF_Font * get_font() const;
 
 protected:
-    Game(){}
+    Game();
     
 private:
     GameStatus status;
@@ -75,7 +75,6 @@ private:
     SDL_Renderer * renderer;
     TTF_Font * font;
 
-    std::deque< EventHandler * > event_handlers; 
     std::vector< GameObject * > game_objects;
     static Game * instance;
 };

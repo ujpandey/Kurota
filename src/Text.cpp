@@ -31,8 +31,13 @@ void TextBox::draw(SDL_Renderer * renderer) const
 void TextBox::on_mouse_button_down()
 {
     SDL_Point p = {_mouse_position.get_x(), _mouse_position.get_y()};
+    std::cout << "HHHHH " << p.x << ' ' << p.y << ' ' << _id
+              << _bounding_rect.x << ' ' << _bounding_rect.y << ' '
+              << _bounding_rect.w << ' ' << _bounding_rect.h << std::endl;
     if (SDL_PointInRect(&p, get_bounds()))
+    {
         _focus = true;
+    }
     else
     {
         _focus = false;
@@ -44,7 +49,7 @@ void TextBox::on_key_down()
 {
     if (_focus)
     {
-         if (_event.key.keysym.sym == SDLK_BACKSPACE && _text.length() > 0)
+         if (_event -> key.keysym.sym == SDLK_BACKSPACE && _text.length() > 0)
          {
              _text.erase(_text.end() - 1);
              _redraw = true;
@@ -60,7 +65,7 @@ void TextBox::on_text_input()
 {
     if (_focus && !_maxed)
     {
-        _text += _event.text.text;
+        _text += _event -> text.text;
         _redraw = true;
     }
     else
@@ -77,8 +82,11 @@ void TextBox::update()
         tm -> load_text(_text, _id, Game::get_instance() -> get_renderer());
         int w, h;
         SDL_QueryTexture(tm -> get_texture(_id), NULL, NULL, &w, &h);
-        if (w > _bounding_rect.w - 28)
+        if (w > _bounding_rect.w)
+        {
+            _text.erase(_text.end() - 1);
             _maxed = true;
+        }
         else
             _maxed = false;
 //         if (h > _bounding_rect.h - 28)

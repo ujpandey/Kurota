@@ -81,6 +81,7 @@ bool TextureManager::load_text(const std::string & text,
     return true;
 }
 
+
 void TextureManager::render(const std::string & id,
                             const int & src_x,
                             const int & src_y,
@@ -106,6 +107,7 @@ void TextureManager::render(const std::string & id,
     SDL_RenderCopyEx(renderer, textures[id], &src, &dest, 0, 0, flip);    
 }
 
+
 void TextureManager::render_whole(const std::string & id,
                                   const int & dest_x,
                                   const int & dest_y,
@@ -119,6 +121,7 @@ void TextureManager::render_whole(const std::string & id,
     SDL_RenderCopyEx(renderer, textures[id], NULL, &dest, 0, 0, flip);
 }
 
+
 void TextureManager::render_as_is(const std::string & id,
                                   const int & dest_x,
                                   const int & dest_y,
@@ -130,11 +133,13 @@ void TextureManager::render_as_is(const std::string & id,
     SDL_RenderCopy(renderer, textures[id], NULL, &dest);
 }
 
+
 void TextureManager::erase(const std::string & id)
 {
     SDL_DestroyTexture(textures[id]);
     textures.erase(id);
 }
+
 
 void TextureManager::clear()
 {
@@ -145,6 +150,7 @@ void TextureManager::clear()
     }
     textures.clear();
 }
+
 
 SDL_Texture * TextureManager::get_texture(const std::string & id)
 {

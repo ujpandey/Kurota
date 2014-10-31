@@ -106,7 +106,8 @@ void CompositeWidget::update()
 
 void CompositeWidget::add_child(Widget * widget)
 {
-    Game::get_instance() -> coup_event_handle(widget);
+    EventManager::get_instance() -> release(this);
+    EventManager::get_instance() -> lease(widget);
     widget -> set_successor(this);
     _widgets.push_back(widget);
 }
@@ -144,7 +145,8 @@ void DialogBox::update()
 {
 }
 
-void DialogBox::add_child(Widget * widget)
+// Gonna assume we won't be doing any auto sizing etc.
+  void DialogBox::add_child(Widget * widget)
 {
     /*
     SDL_Rect tmp = _bounding_rect;
@@ -164,10 +166,10 @@ void DialogBox::add_child(Widget * widget)
     
     _bounding_rect.w += child -> w + (child -> x - _bounding_rect.w) + 10;
     _bounding_rect.h += child -> h + (child -> y - _bounding_rect.h) + 10;
-
     */
-
-    Game::get_instance() -> coup_event_handle(widget);
+    
+    EventManager::get_instance() -> release(this);
+    EventManager::get_instance() -> lease(widget);
     widget -> set_successor(this);
     _widgets.push_back(widget);
 }
@@ -211,7 +213,8 @@ void DecoratorWidget::update()
 
 void DecoratorWidget::add_child(Widget * widget)
 {
-    Game::get_instance() -> coup_event_handle(widget);
+    EventManager::get_instance() -> release(this);
+    EventManager::get_instance() -> lease(widget);
     widget -> set_successor(this);
     _widget = widget;
 }
@@ -261,7 +264,8 @@ void Border::add_child(Widget * widget)
     _bounding_rect.w = tmp -> w + _width + _width;
     _bounding_rect.h = tmp -> h + _width + _width;
 
-    Game::get_instance() -> coup_event_handle(widget);
+    EventManager::get_instance() -> release(this);
+    EventManager::get_instance() -> lease(widget);
     widget -> set_successor(this);
     _widget = widget;
 }

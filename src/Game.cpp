@@ -9,6 +9,11 @@
 Game * Game::instance = NULL;
 
 
+Game::Game()
+    : EventHandler("Game") 
+{}
+
+
 Game * Game::get_instance()
 {
     if (instance)
@@ -91,9 +96,15 @@ bool Game::init(const int & lib_flags,
 }
 
 
+void Game::on_quit()
+{
+    set_status(INACTIVE);
+}
+
+
 void Game::handle_event()
 {
-    (*event_handlers.begin()) -> handle_event();
+    EventManager::get_instance() -> handle_event();
 }
 
 
@@ -162,7 +173,8 @@ void Game::set_clear_color(const int & clear_color_r,
 void Game::register_game_object(GameObject * g_o)
 {
     game_objects.push_back(g_o);
-    register_event_handler(g_o);
+    g_o -> set_successor(this);
+    EventManager::get_instance() -> lease(g_o);
 }
 
 
@@ -172,35 +184,7 @@ void Game::release_game_object(GameObject * g_o)
         std::find(game_objects.begin(), game_objects.end(), g_o);
     if (it != game_objects.end())
         game_objects.erase(it);
-    release_event_handler(g_o);
-}
-
-
-void Game::register_event_handler(EventHandler * e_h)
-{
-    e_h -> set_successor(event_handlers.front());
-    event_handlers.push_front(e_h);
-}
-
-
-void Game::release_event_handler(EventHandler * e_h)
-{
-    std::deque< EventHandler * >::iterator it =
-        std::find(event_handlers.begin(), event_handlers.end(), e_h);
-    if (it != event_handlers.end())
-        event_handlers.erase(it);
-}
-
-
-void Game::coup_event_handle(EventHandler * e_h)
-{
-    event_handlers.push_front(e_h);
-}
-
-
-void Game::free_event_handle()
-{
-    event_handlers.pop_front();
+    EventManager::get_instance() -> release(g_o);
 }
 
 
