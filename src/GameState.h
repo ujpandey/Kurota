@@ -4,6 +4,8 @@
 #include "Includes.h"
 #include "GameObject.h"
 
+class GameObject;
+
 class GameState : public EventHandler
 {
 public:
@@ -23,7 +25,6 @@ protected:
     GameState(const std::string & id);
     
 private:
-    std::string _id;
     std::vector< GameObject * > game_objects;
 };
 

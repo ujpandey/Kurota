@@ -5,7 +5,7 @@
 // GameState
 //-----------------------------------------------------------------------------
 GameState::GameState(const std::string & id)
-    : _id(id)
+    : EventHandler(id)
 {}
 
 GameState::~GameState()
@@ -25,7 +25,7 @@ void GameState::update()
     SDL_Delay(30);
 }
 
-void GameState::draw()
+void GameState::draw(SDL_Renderer * renderer)
 {
     for (std::vector< GameObject * >::iterator it = game_objects.begin();
          it != game_objects.end(); ++it)
@@ -48,7 +48,7 @@ void GameState::on_exit()
 {
     // Temporary solution to clear things out like this. Want Persistence.
     TextureManager::get_instance() -> clear();
-    EventHandler::get_instance() -> clear();
+    EventManager::get_instance() -> clear();
     for (std::vector< GameObject * >::iterator it = game_objects.begin();
          it != game_objects.end(); ++it)
     {
@@ -103,7 +103,7 @@ void GameStateManager::update()
     (*(_game_states.end() - 1)) -> update();
 }
 
-void GameStateManager::draw()
+void GameStateManager::draw(SDL_Renderer * renderer)
 {
     (*(_game_states.end() - 1)) -> update();
 }
@@ -115,12 +115,12 @@ const std::string & GameStateManager::get_current_state_id()
 
 void GameStateManager::register_game_object(GameObject * g_o)
 {
-    (*(_game_states.end() - 1)) -> register_game_object();
+    (*(_game_states.end() - 1)) -> register_game_object(g_o);
 }
 
 void GameStateManager::release_game_object(GameObject * g_o)
 {
-    (*(_game_states.end() - 1)) -> release_game_object();
+    (*(_game_states.end() - 1)) -> release_game_object(g_o);
 }
 
 void GameStateManager::change(GameState * state)

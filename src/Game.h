@@ -12,13 +12,10 @@
 #include "GameState.h"
 #include "TextureManager.h"
 
-
+class GameObject;
 class GameStateManager;
 
-class GameObject;
-
-
-enum Direction {NORTH, EAST, WEST, SOUTH};
+enum Direction { NORTH, EAST, WEST, SOUTH };
 
 
 class Game : public EventHandler
@@ -52,7 +49,8 @@ public:
     void register_game_object(GameObject * g_o);
     void release_game_object(GameObject * g_o);
 
-    const GameStateManager * get_state_manager() const;
+    const GameStateManager * get_game_state_manager() const;
+    const bool running() const;
     SDL_Renderer * get_renderer() const;
     TTF_Font * get_font() const;
 
@@ -60,6 +58,7 @@ protected:
     Game();
     
 private:
+    bool _running;
     GameStateManager * game_state_manager;
     SDL_Color clear_color;
     SDL_Window * window;

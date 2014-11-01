@@ -10,7 +10,7 @@ Game * Game::instance = NULL;
 
 
 Game::Game()
-    : EventHandler("Game") 
+    : EventHandler("Game"), _running(true)
 {
     game_state_manager = new GameStateManager;
 }
@@ -92,7 +92,7 @@ bool Game::init(const int & lib_flags,
 
     SDL_StartTextInput();
     
-    status = RUNNING;
+    game_state_manager -> push(new SplashScreen);
     
     return true;
 }
@@ -100,7 +100,7 @@ bool Game::init(const int & lib_flags,
 
 void Game::on_quit()
 {
-    set_status(INACTIVE);
+    _running = false;
 }
 
 
@@ -120,7 +120,7 @@ void Game::draw()
 {
     clear_screen();
 
-    game_state_manager -> draw();
+    game_state_manager -> draw(renderer);
     
     SDL_RenderPresent(renderer);
 
@@ -175,15 +175,16 @@ void Game::release_game_object(GameObject * g_o)
 }
 
 
-const GameStatus & Game::get_status() const
+const GameStateManager * Game::get_game_state_manager() const
 {
-    return status;
+    return game_state_manager;
 }
 
 
-void Game::set_status(const GameStatus & s)
+
+const bool Game::running() const
 {
-    status = s;
+    return _running;
 }
 
 
