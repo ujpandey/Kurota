@@ -1,4 +1,5 @@
 #include "Includes.h"
+#include "GameObject.h"
 
 
 /******************************************************************************
@@ -10,8 +11,9 @@ const int MAXLEN = 1024;
 struct Client
 {
     TCPsocket sock;
+    bool active;
     std::string _id;
-    std::string _name;
+    std::string _password;
     vec2d _position;
     vec2d _target_position;
     vec2d _velocity;
@@ -96,7 +98,7 @@ int num_clients=0;
 TCPsocket server;
 void send_client(int, std::string);
 void send_all(std::string buf);
-void add_client(TCPsocket sock, std::string name);
+void add_client(TCPsocket sock, std::string id, std::string password);
 
 
 /* find a client in our array of clients by it's socket. */
@@ -111,12 +113,12 @@ int find_client(TCPsocket sock)
 }
 
 
-/* find a client in our array of clients by it's name. */
-/* the name is always unique */
-int find_client_name(std::string name)
+/* find a client in our array of clients by it's id. */
+/* the id is always unique */
+int find_client_id(std::string id)
 {
 	for(int i=0; i < num_clients;i++)
-		if (clients[i].name == name)
+		if (clients[i]._id == id)
 			return i;
 		
 	return -1;
@@ -124,45 +126,51 @@ int find_client_name(std::string name)
 
 
 // Handles logging in
-void handle_login(TCPsocket sock, std::string name, std::string password)
+void handle_login(TCPsocket sock, std::string id, std::string password)
 {
-    if(!name.length())
-	{
-		send_message("User not found.", sock);
-		SDLNet_TCP_Close(sock);
-		return;
-	}
+//     if(!id.length())
+// 	{
+// 		send_message("User not found.", sock);
+// 		SDLNet_TCP_Close(sock);
+// 		return;
+// 	}
 
-    int cindex = find_client_name(name);
+    int cindex = find_client_id(id);
 
     if (cindex == -1)
     {
-        add_client(sock, name);
+        send_message("User not found.", sock);
+        SDLNet_TCP_Close(sock);
         return;
     }
-    
-    if (clients[cindex].active)
+    else if (clients[cindex].active)
     {
         send_message("User already logged in.", sock);
         SDLNet_TCP_Close(sock);
         return;
     }
+    else if (clients[cindex]._password != password)
+    {
+        send_message("Wrong Password.", sock);
+        SDLNet_TCP_Close(sock);
+        return;
+    }
 
-    clients[cindex].sock = sock;
-    clients[cindex].active = true;
+    add_client(sock, id, password);
     return;
 }
 
 
 // Add a client to the list of clients
-void add_client(TCPsocket sock, std::string name)
+void add_client(TCPsocket sock, std::string id, std::string password)
 {	
 	Client c;
 
-	c.name = name;
+	c._id = id;
+    c._password = password;
 	c.sock = sock;
-	c.x = rand() % W;
-	c.y = rand() % H;
+	c._position.set_x(rand() % 600);
+	c._position.set_y(rand() % 600);
     c.active = true;
 
 	clients.push_back(c);
@@ -173,16 +181,16 @@ void add_client(TCPsocket sock, std::string name)
 // 	std::cout << "num clients: " << num_clients << std::endl;
 
 	// Send an acknowledgement
-    std::string success = "Login Successful."
+    std::string success = "Login Successful.";
 	// send client their player number
-	send_client(num_clients - 1, player_number);
+	send_client(num_clients - 1, success);
 }
 
 
 /* closes the socket of a disconnected client */
 void handle_disconnect(int i)
 {
-	std::string name=clients[i].name;
+	std::string id=clients[i]._id;
 
 	if(i<0 || i>=num_clients)
 		return;
@@ -195,12 +203,14 @@ void handle_disconnect(int i)
 }
 
 
-/* Reconnects a client */
-void reconnect_client(std::string name, std::string password)
-{
-    clients[find_client_name(name)].active = true;
-    // pass for now
-}
+// /* Reconnects a client */
+// void reconnect_client(TCPsocket sock, std::string id, std::string password)
+// {
+//     c_index = find_client_id(id);
+//     clients[c_index].active = true;
+//     clients[c_index].sock = sock;
+//     // pass for now
+// }
 
 
 /* create a socket set that has the server socket and all the client sockets */
@@ -287,7 +297,7 @@ int main(int argc, char **argv)
 	/* check our commandline */
 	if(argc < 2)
 	{
-		std::cout << argv[0] << "port\n";
+		std::cout << argv[0] << " port\n";
 		exit(0);
 	}
 	
@@ -354,12 +364,17 @@ int main(int argc, char **argv)
 			sock=SDLNet_TCP_Accept(server);
 			if(sock)
 			{
-				std::string name;
+				std::string from_client;
                 
-				name = recv_message(sock);
-				std::cout << "name: " << name << std::endl;
+				from_client = recv_message(sock);
 
-                handle_login(sock,name);
+                std::istringstream bleh(from_client);
+
+                std::string id, password;
+
+                bleh >> id >> password;
+
+                handle_login(sock, id, password);
             }
             else
                 SDLNet_TCP_Close(sock);
@@ -372,7 +387,7 @@ int main(int argc, char **argv)
 		for(int i = 0; numready > 0 && i < num_clients; i++)
 		{
 			message = "";
-            if (clients[i].state == ACTIVE)
+            if (clients[i].active)
             {
                 if(SDLNet_SocketReady(clients[i].sock))
                 {
