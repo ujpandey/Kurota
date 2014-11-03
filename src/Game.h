@@ -14,9 +14,6 @@
 class GameObject;
 
 
-enum Direction { NORTH, EAST, WEST, SOUTH };
-
-
 class Game : public EventHandler
 {
 public:
@@ -28,7 +25,7 @@ public:
               const int & win_y=SDL_WINDOWPOS_CENTERED,
               const int & win_w=1024,
               const int & win_h=768,
-              const int & win_flags=SDL_WINDOW_RESIZABLE,
+              const int & win_flags=SDL_WINDOW_SHOWN,
               const int & clear_color_r=0,
               const int & clear_color_g=0,
               const int & clear_color_b=0,
@@ -52,12 +49,16 @@ public:
     SDL_Renderer * get_renderer() const;
     TTF_Font * get_font() const;
 
+    const SDL_Rect * get_map_bounds() const;
+
 protected:
     Game();
     
 private:
     bool _running;
     SDL_Color clear_color;
+    SDL_Rect _map;
+// Map map;
     SDL_Window * window;
     SDL_Renderer * renderer;
     TTF_Font * font;

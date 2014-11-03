@@ -40,6 +40,8 @@ public:
 
     double len() const;
 
+    bool almost_equals(const vec2< T > &, const T r=5) const;
+
 private:
     T _x, _y;
 };
@@ -176,11 +178,18 @@ vec2< T > vec2< T >::operator/(T c) const
 template <class T>
 double vec2< T >::len() const
 {
-    std::cout << _x << ' ' << _x * _x << ' ' << _y << ' ' << _y * _y << std::endl;
     return sqrt(_x * _x + _y * _y);
 }
 
-template <class T>
+template < class T >
+bool vec2< T >::almost_equals(const vec2< T > & v, const T r) const
+{
+    //within a tolerance
+    const vec2< T > w = *this - v;//difference
+    return w.len() < r;//radius
+}
+
+template < class T >
 T dot(const vec2< T > & u, const vec2< T > & v)
 {
     return u.get_x() * v.get_x() + u.get_y() * v.get_y();

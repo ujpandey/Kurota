@@ -323,11 +323,13 @@ void Border::update()
 void Border::add_child(Widget * widget)
 {
     const SDL_Rect * tmp = widget -> get_bounds();
+    std::cout << tmp -> x << ' ' << tmp -> y << ' ' << tmp -> w << ' ' << tmp -> h << std::endl;
     _bounding_rect.x = tmp -> x - _width;
     _bounding_rect.y = tmp -> y - _width;
     _bounding_rect.w = tmp -> w + _width + _width;
     _bounding_rect.h = tmp -> h + _width + _width;
-
+    const SDL_Rect * br = &_bounding_rect;
+    std::cout << br -> x << ' ' << br -> y << ' ' << br -> w << ' ' << br -> h << std::endl;
     EventManager::get_instance() -> release(this);
     EventManager::get_instance() -> lease(widget);
     widget -> set_successor(this);

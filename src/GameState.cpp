@@ -34,13 +34,13 @@ void GameState::update()
 
 void GameState::draw(SDL_Renderer * renderer)
 {
-    std::cout << "Drawing for: ";
+    //std::cout << "Drawing for: ";
     for (std::vector< GameObject * >::iterator it = game_objects.begin();
          it != game_objects.end(); ++it)
     {
         (*it) -> draw(renderer);
     }
-    std::cout << _id << std::endl;
+    //std::cout << _id << std::endl;
 }
 
 const std::string & GameState::get_id()
@@ -141,8 +141,30 @@ PlayState::PlayState(const std::string & id)
 void PlayState::on_entry()
 {
     std::cout << "Beginning play" << std::endl;
-    TextBox * Chat_box = new TextBox("Chat_box", "", 0, 0, 200, 30);
-    register_game_object(Chat_box);
+    Border * Chat_dbox_brdr = new Border("Chat_dbox_brdr",
+                                           4, 0, 64, 71, 255);
+    register_game_object(Chat_dbox_brdr);
+    DialogBox * Chat_dbox = new DialogBox("Chat_dbox",
+                                          "../assets/Chat_dbox.png",
+                                          Game::get_instance() -> get_renderer(),
+                                          5, 605, 790, 115);
+    Chat_dbox_brdr -> add_child(Chat_dbox);
+    TextArea * Chat_display = new TextArea("Chat_display", "Welcome!", 16, 0, 756, 79);
+    TextBox * Chat_entry = new TextBox("Chat_entry", "", 16, 82, 756, 30);
+    Chat_dbox -> add_child(Chat_display);
+    Chat_dbox -> add_child(Chat_entry);
+
+    Border * Side_bar_brdr = new Border("Side_bar_brdr", 5, 238, 203, 173, 255);
+    register_game_object(Side_bar_brdr);
+    DialogBox * Side_bar = new DialogBox("Side_bar",
+                                         "../assets/Side_bar.png",
+                                         Game::get_instance() -> get_renderer(),
+                                         806, 6, 214, 710);
+    Side_bar_brdr -> add_child(Side_bar);
+
+    Player * player = new Player("player", "../assets/caster.png",
+                                 Game::get_instance() -> get_renderer());
+    register_game_object(player);
 }
 
 

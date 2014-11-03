@@ -13,7 +13,7 @@ EventHandler::~EventHandler()
 void EventHandler::handle_event()
 {
     SDL_Event _event = EventManager::get_instance() -> get_event();
-    std::cout << "Handling event for " << _id << std::endl;
+    //std::cout << "Handling event for " << _id << std::endl;
     switch (_event.type)
     {
         case SDL_QUIT:

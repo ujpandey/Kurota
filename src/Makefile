@@ -12,7 +12,7 @@ OBJDIR = .
 
 # List of all objects that this makefile is concerned with.
 # Anything not immediately related to server or client is here for now ???.
-OBJECTS = Command.o GameState.o EventManager.o EventHandler.o GameObject.o Widget.o Game.o Text.o TextureManager.o
+OBJECTS = Timer.o Command.o GameState.o EventManager.o EventHandler.o GameObject.o Widget.o Game.o Text.o TextureManager.o
 
 # The main workhorse of the makefile. Builds all the object files
 # and then updates the timestamp used to update clients.

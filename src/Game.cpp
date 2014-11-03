@@ -92,8 +92,15 @@ bool Game::init(const int & lib_flags,
     }
 
     SDL_StartTextInput();
+
+    // init map here...
+    _map.x = 0;
+    _map.y = 0;
+    _map.w = 800;
+    _map.h = 600;
     
-    GameStateManager::get_instance() -> push(new SplashScreen);
+    GameStateManager::get_instance() -> push(new PlayState);
+//    GameStateManager::get_instance() -> push(new SplashScreen);
     
     return true;
 }
@@ -189,4 +196,9 @@ SDL_Renderer * Game::get_renderer() const
 TTF_Font * Game::get_font() const
 {
     return font;
+}
+
+const SDL_Rect * Game::get_map_bounds() const
+{
+    return &_map;
 }
