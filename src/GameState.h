@@ -32,18 +32,22 @@ class SplashScreen : public GameState
 {
 public:
     SplashScreen(const std::string & id="Splash");
+
+    virtual void on_entry();
 };
 
 class PlayState : public GameState
 {
 public:
     PlayState(const std::string & id="Play");
+
+    virtual void on_entry();
 };
 
 class GameStateManager
 {
 public:
-    GameStateManager();
+    static GameStateManager * get_instance();
     virtual ~GameStateManager();
     //virtual void handle_event();
     virtual void update();
@@ -56,8 +60,12 @@ public:
     void change(GameState * state);
     void push(GameState * state);
     void pop();
+    
+protected:
+    GameStateManager();
 
 private:
+    static GameStateManager * _instance;
     std::vector< GameState * > _game_states;
 };
 

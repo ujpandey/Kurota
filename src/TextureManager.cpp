@@ -46,13 +46,14 @@ bool TextureManager::load(const std::string & filename,
 
 bool TextureManager::load_text(const std::string & text,
                                const std::string & id,
+                               const SDL_Color & color,
                                SDL_Renderer * renderer)
 {
     if (textures[id] != NULL)
         SDL_DestroyTexture(textures[id]);
     std::string rendered_text = " ";
     TTF_Font * f = Game::get_instance() -> get_font();
-    SDL_Color color = {152, 255, 255, 0};
+    //SDL_Color color = {152, 255, 255, 0};
     if (text.length() > 0)
     {
         rendered_text = text;

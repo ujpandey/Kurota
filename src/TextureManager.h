@@ -12,6 +12,7 @@ public:
               SDL_Renderer * renderer);
     bool load_text(const std::string & text,
                    const std::string & id,
+                   const SDL_Color & color,
                    SDL_Renderer * renderer);
     void render(const std::string & id,
                 const int & src_x,

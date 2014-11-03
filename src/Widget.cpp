@@ -1,5 +1,8 @@
 #include "Widget.h"
-
+#include "Game.h"
+#include "TextureManager.h"
+#include "EventManager.h"
+#include "Command.h"
 
 //-----------------------------------------------------------------------------
 // Widget
@@ -27,8 +30,9 @@ void Widget::update()
 Button::Button(const std::string & id,
                const std::string & texture_file,
                SDL_Renderer * renderer,
-               int x, int y, int w, int h)
-    : Widget(id)
+               int x, int y, int w, int h,
+               Command * command)
+    : Widget(id), _command(command)
 {
     _bounding_rect.x = x;
     _bounding_rect.y = y;
@@ -49,6 +53,21 @@ Button::Button(const std::string & id,
 
 Button::~Button()
 {}
+
+void Button::on_mouse_button_down()
+{
+    vec2d _mouse_position = EventManager::get_instance() -> get_mouse_position();
+    SDL_Point p = {_mouse_position.get_x(), _mouse_position.get_y()};
+    if (SDL_PointInRect(&p, get_bounds()))
+    {
+        if (_command)
+        {
+            _command -> execute();
+        }
+    }
+    else
+        _successor -> on_mouse_button_down();
+}
 
 void Button::draw(SDL_Renderer * renderer) const
 {

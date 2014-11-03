@@ -1,4 +1,6 @@
 #include "GameObject.h"
+#include "Game.h"
+#include "TextureManager.h"
 
 Player::Player(const std::string & id,
                const std::string & texture_file,

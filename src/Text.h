@@ -18,13 +18,12 @@ public:
 }
 */
 
-
 class TextBox : public Widget
 {
 public:
     TextBox(const std::string & id,
             const std::string & text="",
-            int x=0, int y=0, int w=0, int h=0);
+            int x=0, int y=0, int w=0, int h=0, bool password=false);
     ~TextBox();
     
     virtual void draw(SDL_Renderer * renderer) const;
@@ -43,7 +42,33 @@ private:
     bool _focus;
     bool _redraw;
     bool _maxed;
+    bool _password;
+    SDL_Color _bgcolor;
+    SDL_Color _textcolor;
     SDL_Rect _bounding_rect; 
+};
+
+class TextArea : public Widget
+{
+public:
+    TextArea(const std::string & id,
+            const std::string & text="",
+            int x=0, int y=0, int w=0, int h=0);
+    ~TextArea();
+    
+    virtual void draw(SDL_Renderer * renderer) const;
+    virtual void update();
+    virtual const SDL_Rect * get_bounds() const;
+    virtual void set_bounds(const int & x,
+                            const int & y,
+                            const int & w,
+                            const int & h);
+    virtual void set_text(const std::string & text);
+private:
+    std::string _text;
+    bool _redraw;
+    SDL_Color _textcolor;
+    SDL_Rect _bounding_rect;
 };
 
 #endif

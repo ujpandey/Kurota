@@ -1,8 +1,9 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include "Game.h"
-#include "TextureManager.h"
+#include "GameObject.h"
+
+class Command;
 
 class Widget : public GameObject
 {
@@ -27,9 +28,12 @@ public:
     Button(const std::string & id,
            const std::string & texture_file,
            SDL_Renderer * renderer,
-           int x=0, int y=0, int w=0, int h=0);
+           int x=0, int y=0, int w=0, int h=0,
+           Command * command=NULL);
     virtual ~Button();
 
+    virtual void on_mouse_button_down();
+    
     virtual void draw(SDL_Renderer * renderer) const;
     virtual void update();
     virtual const SDL_Rect * get_bounds() const;
@@ -39,6 +43,7 @@ public:
                             const int & h);
     
 private:
+    Command * _command;
     SDL_Rect _bounding_rect;
 };
 

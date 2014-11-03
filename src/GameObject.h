@@ -1,7 +1,7 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-#include "Game.h"
+#include "EventHandler.h"
     
 class GameObject : public EventHandler
 {

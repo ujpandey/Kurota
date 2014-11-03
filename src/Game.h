@@ -8,12 +8,11 @@
 
 
 #include "Includes.h"
-#include "EventManager.h"
-#include "GameState.h"
-#include "TextureManager.h"
+#include "EventHandler.h"
+
 
 class GameObject;
-class GameStateManager;
+
 
 enum Direction { NORTH, EAST, WEST, SOUTH };
 
@@ -30,9 +29,9 @@ public:
               const int & win_w=1024,
               const int & win_h=768,
               const int & win_flags=SDL_WINDOW_RESIZABLE,
-              const int & clear_color_r=255,
-              const int & clear_color_g=255,
-              const int & clear_color_b=255,
+              const int & clear_color_r=0,
+              const int & clear_color_g=0,
+              const int & clear_color_b=0,
               const int & clear_color_a=255);
 
     void on_quit();
@@ -49,7 +48,6 @@ public:
     void register_game_object(GameObject * g_o);
     void release_game_object(GameObject * g_o);
 
-    const GameStateManager * get_game_state_manager() const;
     const bool running() const;
     SDL_Renderer * get_renderer() const;
     TTF_Font * get_font() const;
@@ -59,7 +57,6 @@ protected:
     
 private:
     bool _running;
-    GameStateManager * game_state_manager;
     SDL_Color clear_color;
     SDL_Window * window;
     SDL_Renderer * renderer;

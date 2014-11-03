@@ -4,7 +4,9 @@
 
 
 #include "Game.h"
-
+#include "EventManager.h"
+#include "TextureManager.h"
+#include "GameState.h"
 
 Game * Game::instance = NULL;
 
@@ -12,7 +14,6 @@ Game * Game::instance = NULL;
 Game::Game()
     : EventHandler("Game"), _running(true)
 {
-    game_state_manager = new GameStateManager;
 }
 
 
@@ -82,7 +83,7 @@ bool Game::init(const int & lib_flags,
     
     set_clear_color(clear_color_r, clear_color_g, clear_color_b, clear_color_a);
 
-    font = TTF_OpenFont("../assets/arial.ttf", 28);
+    font = TTF_OpenFont("../assets/arial.ttf", 24);
     if (font == NULL)
     {
         std::cerr << "Font not loaded: " << TTF_GetError() << std::endl;
@@ -92,7 +93,7 @@ bool Game::init(const int & lib_flags,
 
     SDL_StartTextInput();
     
-    game_state_manager -> push(new SplashScreen);
+    GameStateManager::get_instance() -> push(new SplashScreen);
     
     return true;
 }
@@ -112,7 +113,7 @@ void Game::handle_event()
 
 void Game::update()
 {
-    game_state_manager -> update();
+    GameStateManager::get_instance() -> update();
 }
 
 
@@ -120,7 +121,7 @@ void Game::draw()
 {
     clear_screen();
 
-    game_state_manager -> draw(renderer);
+    GameStateManager::get_instance() -> draw(renderer);
     
     SDL_RenderPresent(renderer);
 
@@ -165,22 +166,14 @@ void Game::set_clear_color(const int & clear_color_r,
 
 void Game::register_game_object(GameObject * g_o)
 {
-    game_state_manager -> register_game_object(g_o);
+    GameStateManager::get_instance() -> register_game_object(g_o);
 }
 
 
 void Game::release_game_object(GameObject * g_o)
 {
-    game_state_manager -> release_game_object(g_o);
+    GameStateManager::get_instance() -> release_game_object(g_o);
 }
-
-
-const GameStateManager * Game::get_game_state_manager() const
-{
-    return game_state_manager;
-}
-
-
 
 const bool Game::running() const
 {

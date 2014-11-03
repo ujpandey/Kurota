@@ -1,4 +1,9 @@
 #include "GameState.h"
+#include "Widget.h"
+#include "Text.h"
+#include "TextureManager.h"
+#include "EventManager.h"
+#include "Command.h"
 
 
 //-----------------------------------------------------------------------------
@@ -6,7 +11,9 @@
 //-----------------------------------------------------------------------------
 GameState::GameState(const std::string & id)
     : EventHandler(id)
-{}
+{
+    set_successor(Game::get_instance());
+}
 
 GameState::~GameState()
 {}
@@ -27,11 +34,13 @@ void GameState::update()
 
 void GameState::draw(SDL_Renderer * renderer)
 {
+    std::cout << "Drawing for: ";
     for (std::vector< GameObject * >::iterator it = game_objects.begin();
          it != game_objects.end(); ++it)
     {
         (*it) -> draw(renderer);
     }
+    std::cout << _id << std::endl;
 }
 
 const std::string & GameState::get_id()
@@ -46,6 +55,7 @@ void GameState::on_entry()
 
 void GameState::on_exit()
 {
+    std::cout << "Exiting ... " << _id << std::endl;
     // Temporary solution to clear things out like this. Want Persistence.
     TextureManager::get_instance() -> clear();
     EventManager::get_instance() -> clear();
@@ -54,6 +64,7 @@ void GameState::on_exit()
     {
         delete (*it);
     }
+    game_objects.clear();
 }
 
 void GameState::register_game_object(GameObject * g_o)
@@ -80,6 +91,45 @@ SplashScreen::SplashScreen(const std::string & id)
     : GameState(id)
 {}
 
+void SplashScreen::on_entry()
+{
+    // Logo
+    Button * Logo = new Button("Logo", "../assets/logo.png",
+                               Game::get_instance() -> get_renderer(),
+                               375, 150);
+    register_game_object(Logo);
+
+    // Login Box
+    Border * Splash_dbox_brdr = new Border("Splash_dbox_brdr",
+                                           10, 0, 64, 71, 255);
+    register_game_object(Splash_dbox_brdr);
+
+    DialogBox * Splash_dbox = new DialogBox("Splash_dbox",
+                                            "../assets/Splash_dbox.png",
+                                            Game::get_instance() -> get_renderer(),
+                                            325, 250, 400, 250);
+    Splash_dbox_brdr -> add_child(Splash_dbox);
+
+    TextArea * Feedback = new TextArea("Feedback", "", 10, 10, 300, 30);
+    TextArea * User_query = new TextArea("User_query", "Username: ", 40, 60, 150, 30);
+    TextArea * Password_query = new TextArea("Password_query", "Password: ", 40, 110, 150, 30);
+    TextBox * Username = new TextBox("Username", "", 160, 60, 200, 30);
+    TextBox * Password = new TextBox("Password", "", 160, 110, 200, 30, true);
+    Button * Login = new Button("Login", "../assets/login.png",
+                                Game::get_instance() -> get_renderer(),
+                                80, 180, 100, 40, new LoginCommand(Feedback));
+    Button * Register = new Button("Register", "../assets/register.png",
+                                   Game::get_instance() -> get_renderer(),
+                                   220, 180, 100, 40);
+
+    Splash_dbox -> add_child(User_query);
+    Splash_dbox -> add_child(Password_query);
+    Splash_dbox -> add_child(Username);
+    Splash_dbox -> add_child(Password);
+    Splash_dbox -> add_child(Login);
+    Splash_dbox -> add_child(Register);
+}
+
 
 //-----------------------------------------------------------------------------
 // PlayState
@@ -88,10 +138,27 @@ PlayState::PlayState(const std::string & id)
     : GameState(id)
 {}
 
+void PlayState::on_entry()
+{
+    std::cout << "Beginning play" << std::endl;
+    TextBox * Chat_box = new TextBox("Chat_box", "", 0, 0, 200, 30);
+    register_game_object(Chat_box);
+}
+
 
 //-----------------------------------------------------------------------------
 // GameStateManager
 //-----------------------------------------------------------------------------
+GameStateManager * GameStateManager::_instance = NULL;
+
+GameStateManager * GameStateManager::get_instance()
+{
+    if (_instance)
+        return _instance;
+    _instance = new GameStateManager;
+    return _instance;
+}
+
 GameStateManager::GameStateManager()
 {}
 
@@ -105,7 +172,7 @@ void GameStateManager::update()
 
 void GameStateManager::draw(SDL_Renderer * renderer)
 {
-    (*(_game_states.end() - 1)) -> update();
+    (*(_game_states.end() - 1)) -> draw(renderer);
 }
 
 const std::string & GameStateManager::get_current_state_id()
