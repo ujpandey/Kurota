@@ -97,16 +97,16 @@ bool Game::init(const int & lib_flags,
     // init map here...
     _map.x = 0;
     _map.y = 0;
-    _map.w = 600;
-    _map.h = 600;
+    _map.w = 800;
+    _map.h = 500;
 
 //     _fps = 60;
 //     _ticks_per_frame = 1000 / _fps;
 
 //     _timer.start();
 //     _ticks = 0;
-//    GameStateManager::get_instance() -> push(new PlayState);
-   GameStateManager::get_instance() -> push(new SplashScreen);
+//  GameStateManager::get_instance() -> push(new PlayState);
+    GameStateManager::get_instance() -> push(new SplashScreen);
     
     return true;
 }

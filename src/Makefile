@@ -18,6 +18,7 @@ OBJECTS = Timer.o Command.o GameState.o EventManager.o EventHandler.o GameObject
 # and then updates the timestamp used to update clients.
 build: $(addprefix $(OBJDIR)/, $(OBJECTS))
 	$(CC) $(CPPFLAGS) main.cpp *.o $(LIBS) -o main
+
 # Just individual compilation of all objects.
 $(addprefix $(OBJDIR)/, $(OBJECTS)): %.o: %.cpp
 	$(CC) -c $(CPPFLAGS) $< -o $@

@@ -59,11 +59,11 @@ void GameState::on_exit()
     // Temporary solution to clear things out like this. Want Persistence.
     TextureManager::get_instance() -> clear();
     EventManager::get_instance() -> clear();
-    for (std::vector< GameObject * >::iterator it = game_objects.begin();
-         it != game_objects.end(); ++it)
-    {
-        delete (*it);
-    }
+   //  for (std::vector< GameObject * >::iterator it = game_objects.begin();
+//          it != game_objects.end(); ++it)
+//     {
+//         delete (*it);
+//     }
     game_objects.clear();
 }
 

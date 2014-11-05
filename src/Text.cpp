@@ -15,9 +15,9 @@ TextBox::TextBox(const std::string & id,
     _bgcolor.g = 193;
     _bgcolor.b = 158;
     _bgcolor.a = 255;
-    _textcolor.r = 152;
-    _textcolor.g = 255;
-    _textcolor.b = 255;
+    _textcolor.r = 54;
+    _textcolor.g = 69;
+    _textcolor.b = 79;
     _textcolor.a = 255;
     _bounding_rect.x = x;
     _bounding_rect.y = y;
@@ -25,7 +25,7 @@ TextBox::TextBox(const std::string & id,
     _bounding_rect.h = h;
     if (_password)
     {
-        std::string pwtext = _text.replace(_text.begin(), _text.end(), _text.size(), '*');
+        std::string pwtext = _text.replace(_text.begin(), _text.end(), _text.size(), 178);
         TextureManager::get_instance() ->
             load_text(pwtext, _id, _textcolor, Game::get_instance() -> get_renderer());
     }
