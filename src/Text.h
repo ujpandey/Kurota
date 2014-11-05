@@ -36,6 +36,7 @@ public:
                             const int & y,
                             const int & w,
                             const int & h);
+    virtual void set_focus();
     
 private:
     std::string _text;

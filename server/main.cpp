@@ -14,6 +14,8 @@ struct Client
     bool active;
     std::string _id;
     std::string _password;
+    int _hp;
+    int _mana;
     vec2d _position;
     vec2d _target_position;
     vec2d _velocity;
@@ -22,29 +24,29 @@ struct Client
     std::string serialize()
     {
         std::ostringstream ret_stream;
-        ret_stream << _id << ' ' << _position.get_x() << ' ' << _position.get_y()
+        ret_stream << _id << ' ' << _hp << ' ' << _mana << ' '
+                   << _position.get_x() << ' ' << _position.get_y()
                    << _target_position.get_x() << ' ' << _target_position.get_y() << ' '
                    << _velocity.get_x() << ' ' << _velocity.get_y() << ' '
                    << _facing << ' ';
         return ret_stream.str();
     }
 
-    void deserialize(std::string serialized)
+    void deserialize(const std::string & serialized)
     {
         std::istringstream in_stream(serialized);
         int facing;
         double px, py, tx, ty, vx, vy;
-        in_stream >> _id >> px >> py >> tx >> ty >> vx >> vy >> facing;
+        in_stream >> _id >> _hp >> _mana >> px >> py >> tx >> ty >> vx >> vy >> facing;
         _position.set_x(px);
         _position.set_y(py);
-        _target_position.set_x(px);
-        _target_position.set_y(py);
+        _target_position.set_x(tx);
+        _target_position.set_y(ty);
         _velocity.set_x(vx);
         _velocity.set_y(vy);
         _facing = static_cast< Direction >(facing);
     }
 };
-
 
 // Receive a string over TCP/IP
 std::string recv_message(TCPsocket sock)
@@ -96,9 +98,60 @@ std::string itos(int i)
 std::vector<Client> clients;
 int num_clients=0;
 TCPsocket server;
+
+// Load registered clients from file
+void load_clients(const std::string & file_name=".clients.db")
+{
+    std::fstream fs;
+    fs.open(file_name.c_str(), std::fstream::in);
+    if (fs.is_open())
+    {
+        std::string input;
+        while (std::getline(fs, input))
+        {
+            std::cout << input << std::endl;
+
+            std::istringstream in_stream(input);
+            Client c;
+            int facing;
+            double px, py;
+
+            in_stream >> c._id >> c._hp >> c._mana >> px >> py;
+            c._position.set_x(px);
+            c._position.set_y(py);
+            c._target_position.set_x(0);
+            c._target_position.set_y(0);
+            c._velocity.set_x(0);
+            c._velocity.set_y(0);
+            c._facing = static_cast< Direction >(3);
+
+            clients.push_back(c);
+
+            num_clients++;
+        }
+        fs.close();
+    }
+}
+
+// Write clients to file
+void dump_clients(const std::string & filename=".clients.db")
+{
+    std::ofstream fs;
+    fs.open(filename.c_str(), std::fstream::out);
+    for (int i = 0; i < clients.size(); ++i)
+    {
+        fs << clients[i]._id << ' ' << clients[i]._password << ' '
+           << clients[i]._hp << ' ' << clients[i]._mana << ' '
+           << clients[i]._position.get_x() << ' ' << clients[i]._position.get_y()
+           << ' ' << '\n';
+    }
+    fs.close();
+}
+
 void send_client(int, std::string);
 void send_all(std::string buf);
 void add_client(TCPsocket sock, std::string id, std::string password);
+void reconnect_client(TCPsocket sock, std::string id, std::string password);
 
 
 /* find a client in our array of clients by it's socket. */
@@ -156,7 +209,44 @@ void handle_login(TCPsocket sock, std::string id, std::string password)
         return;
     }
 
-    add_client(sock, id, password);
+    reconnect_client(sock, id, password);
+    
+    return;
+}
+
+// Handle registration
+void handle_registration(TCPsocket sock, std::string id, std::string password)
+{
+//     if(!id.length())
+// 	{
+// 		send_message("User not found.", sock);
+// 		SDLNet_TCP_Close(sock);
+// 		return;
+// 	}
+
+    int cindex = find_client_id(id);
+
+    if (cindex == -1)
+    {
+        send_message("User not found.", sock);
+        SDLNet_TCP_Close(sock);
+        return;
+    }
+    else if (clients[cindex].active)
+    {
+        send_message("User already logged in.", sock);
+        SDLNet_TCP_Close(sock);
+        return;
+    }
+    else if (clients[cindex]._password != password)
+    {
+        send_message("Wrong Password.", sock);
+        SDLNet_TCP_Close(sock);
+        return;
+    }
+
+    reconnect_client(sock, id, password);
+    
     return;
 }
 
@@ -180,10 +270,8 @@ void add_client(TCPsocket sock, std::string id, std::string password)
 	// std::cout << "inside add client" << std::endl;
 // 	std::cout << "num clients: " << num_clients << std::endl;
 
+    dump_clients();
 	// Send an acknowledgement
-    std::string success = "Login Successful.";
-	// send client their player number
-	send_client(num_clients - 1, success);
 }
 
 
@@ -203,14 +291,17 @@ void handle_disconnect(int i)
 }
 
 
-// /* Reconnects a client */
-// void reconnect_client(TCPsocket sock, std::string id, std::string password)
-// {
-//     c_index = find_client_id(id);
-//     clients[c_index].active = true;
-//     clients[c_index].sock = sock;
-//     // pass for now
-// }
+/* Reconnects a client */
+void reconnect_client(TCPsocket sock, std::string id, std::string password)
+{
+    int c_index = find_client_id(id);
+    clients[c_index].active = true;
+    clients[c_index].sock = sock;
+    std::string success = "Login Successful.";
+	// send client their player number
+	send_client(c_index, success);
+    // pass for now
+}
 
 
 /* create a socket set that has the server socket and all the client sockets */
@@ -339,6 +430,8 @@ int main(int argc, char **argv)
 		SDL_Quit();
 		exit(4);
 	}
+
+    load_clients();
 
 	while(1)
 	{

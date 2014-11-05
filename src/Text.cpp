@@ -47,6 +47,22 @@ void TextBox::draw(SDL_Renderer * renderer) const
     SDL_SetRenderDrawColor(renderer, r, g, b, a);
     TextureManager * tm = TextureManager::get_instance();
     tm -> render_as_is(_id, _bounding_rect.x, _bounding_rect.y, renderer);
+    if (_focus)
+    {
+        int x = _bounding_rect.x;
+        int y = _bounding_rect.y;
+        int w, h;
+        SDL_QueryTexture(tm -> get_texture(_id), NULL, NULL, &w, &h);
+        SDL_Rect highlight = {x - 1, y - 1,
+                              _bounding_rect.w + 2, _bounding_rect.h + 2};
+        SDL_SetRenderDrawColor(renderer, 152, 255, 255, 255);
+        SDL_RenderDrawRect(renderer, &highlight);
+        SDL_SetRenderDrawColor(renderer, r, g, b, a);
+        if (_text.empty())
+            w = 3;
+        SDL_Rect cursor = {x + w + 2, y + 2, 1, 26};
+        SDL_RenderFillRect(renderer, &cursor);
+    }
 }
 
 void TextBox::on_mouse_button_down()
@@ -74,6 +90,8 @@ void TextBox::on_key_down()
              _text.erase(_text.end() - 1);
              _redraw = true;
          }
+         else
+             _successor -> on_key_down();
     }
     else
     {
@@ -143,6 +161,11 @@ void TextBox::set_bounds(const int & x,
     _bounding_rect.y = y;
     _bounding_rect.w = w;
     _bounding_rect.h = h;
+}
+
+void TextBox::set_focus()
+{
+    _focus = true;
 }
 
 //-----------------------------------------------------------------------------
