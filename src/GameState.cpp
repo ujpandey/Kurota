@@ -110,18 +110,21 @@ void SplashScreen::on_entry()
                                             325, 250, 400, 250);
     Splash_dbox_brdr -> add_child(Splash_dbox);
 
-    TextArea * Feedback = new TextArea("Feedback", "", 10, 10, 300, 30);
+    TextArea * Feedback = new TextArea("Feedback", "Enter your information.", 100, 10, 300, 30);
     TextArea * User_query = new TextArea("User_query", "Username: ", 40, 60, 150, 30);
     TextArea * Password_query = new TextArea("Password_query", "Password: ", 40, 110, 150, 30);
     TextBox * Username = new TextBox("Username", "", 160, 60, 200, 30);
     TextBox * Password = new TextBox("Password", "", 160, 110, 200, 30, true);
     Button * Login = new Button("Login", "../assets/login.png",
                                 Game::get_instance() -> get_renderer(),
-                                80, 180, 100, 40, new LoginCommand(Feedback));
+                                80, 180, 100, 40,
+                                new LoginCommand(Feedback, Username, Password));
     Button * Register = new Button("Register", "../assets/register.png",
                                    Game::get_instance() -> get_renderer(),
-                                   220, 180, 100, 40);
+                                   220, 180, 100, 40,
+                                   new RegistrationCommand(Feedback, Username, Password));
 
+    Splash_dbox -> add_child(Feedback);
     Splash_dbox -> add_child(User_query);
     Splash_dbox -> add_child(Password_query);
     Splash_dbox -> add_child(Username);

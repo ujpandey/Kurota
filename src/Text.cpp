@@ -25,7 +25,8 @@ TextBox::TextBox(const std::string & id,
     _bounding_rect.h = h;
     if (_password)
     {
-        std::string pwtext = _text.replace(_text.begin(), _text.end(), _text.size(), 178);
+        std::string pwtext = _text;
+        pwtext.replace(pwtext.begin(), pwtext.end(), pwtext.size(), 178);
         TextureManager::get_instance() ->
             load_text(pwtext, _id, _textcolor, Game::get_instance() -> get_renderer());
     }
@@ -166,6 +167,11 @@ void TextBox::set_bounds(const int & x,
 void TextBox::set_focus()
 {
     _focus = true;
+}
+
+const std::string & TextBox::get_text() const
+{
+    return _text;
 }
 
 //-----------------------------------------------------------------------------

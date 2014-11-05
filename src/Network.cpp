@@ -72,6 +72,17 @@ void NetworkManager::connect()
     }
 }
 
+void NetworkManager::disconnect()
+{
+    if (SDLNet_TCP_DelSocket(set, sock) == -1)
+    {
+        std::cerr << "SDLNet_DelSocket error: "
+                  << SDLNet_GetError() << std::endl;
+
+        exit (-1);
+    }
+}
+
 // Receive a string over TCP/IP
 std::string NetworkManager::recv_message(TCPsocket sock)
 {
@@ -119,5 +130,11 @@ std::string NetworkManager::listen()
 
 void NetworkManager::say(const std::string & msg)
 {
-    send_message(msg, sock);
+    if (!send_message(msg, sock))
+    {
+        disconnect();
+        connect();
+        listen();
+        send_message(msg, sock);
+    }
 }

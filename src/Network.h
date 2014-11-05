@@ -9,12 +9,15 @@ class NetworkManager
 {
 public:
     static NetworkManager * get_instance();
+    
     void init(const char * hostaddr);
+    
     void connect();
+    void disconnect();
+    
     std::string listen();
     void say(const std::string & msg);
 
-private:
     // Network stuff
     IPaddress ip;
     Uint16 port;
@@ -25,6 +28,7 @@ private:
     std::string to_server;
     std::string from_server;
 
+private:
     static NetworkManager * instance;
 
     NetworkManager();

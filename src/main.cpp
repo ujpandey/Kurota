@@ -17,11 +17,28 @@
 
 #include "Includes.h"
 #include "Game.h"
+#include "Network.h"
 
 
-int main()
+int main(int argc, char ** argv)
 {
+    /* check our commandline */
+	if(argc < 3)
+	{
+		std::cout << "Usage: " << argv[0] << " host_ip host_port" << std::endl;
+
+        return 0;
+	}
+
+    /* get the port from the commandline */
+    NetworkManager * nm = NetworkManager::get_instance();
+    nm -> port = (Uint16)strtol(argv[2],NULL,0);
+    const char * hostaddr = argv[1];
+    nm -> init(hostaddr);
+    nm -> connect();
+    
     Game::get_instance() -> init();
+    
     
     while(Game::get_instance() -> running())
     {

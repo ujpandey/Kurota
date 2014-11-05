@@ -19,13 +19,33 @@ class LoginCommand : public Command
 {
 public:
     LoginCommand(TextArea * notice_board,
-                 const std::string & response="Enter your information.");
+                 TextBox * uname,
+                 TextBox * passwd,
+                 const std::string & response="");
     virtual ~LoginCommand();
 
     virtual void execute();
-    virtual void authenticate();
 private:
     TextArea * _notice_board;
+    TextBox * _uname;
+    TextBox * _passwd;
+    std::string _response;
+};
+
+class RegistrationCommand : public Command
+{
+public:
+    RegistrationCommand(TextArea * notice_board,
+                 TextBox * uname,
+                 TextBox * passwd,
+                 const std::string & response="");
+    virtual ~RegistrationCommand();
+
+    virtual void execute();
+private:
+    TextArea * _notice_board;
+    TextBox * _uname;
+    TextBox * _passwd;
     std::string _response;
 };
 
