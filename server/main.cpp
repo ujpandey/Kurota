@@ -10,6 +10,12 @@ const int MAXLEN = 1024;
 
 struct Client
 {
+    Client()
+        : sock(NULL), active(false), _id(""), _password(""),
+          _hp(100), _mana(100), _position(vec2d(0,0)),
+          _target_position(vec2d(0,0)), _velocity(vec2d(0,0)), _facing(SOUTH)
+    {}
+           
     TCPsocket sock;
     bool active;
     std::string _id;
@@ -109,27 +115,34 @@ void load_clients(const std::string & file_name="clients.db")
         std::string input;
         while (std::getline(fs, input))
         {
+            if (input == "")
+                break;
             std::cout << input << std::endl;
 
             std::istringstream in_stream(input);
+
             Client c;
+
             int facing;
             double px, py;
 
-            in_stream >> c._id >> c._hp >> c._mana >> px >> py;
+            in_stream >> c._id >> c._password >> c._hp >> c._mana >> px >> py;
             c._position.set_x(px);
             c._position.set_y(py);
-            c._target_position.set_x(0);
-            c._target_position.set_y(0);
-            c._velocity.set_x(0);
-            c._velocity.set_y(0);
-            c._facing = static_cast< Direction >(3);
 
             clients.push_back(c);
 
             num_clients++;
         }
         fs.close();
+    }
+}
+
+void print_clients()
+{
+    for (int i = 0; i < clients.size(); ++i)
+    {
+        std::cout << i << ' ' << clients[i]._id << ' ' << clients[i]._password << std::endl;
     }
 }
 
@@ -268,7 +281,7 @@ void add_client(TCPsocket sock, std::string id, std::string password)
 	// std::cout << "inside add client" << std::endl;
 // 	std::cout << "num clients: " << num_clients << std::endl;
 
-    //dump_clients();
+    dump_clients();
 	// Send an acknowledgement
 }
 
@@ -429,8 +442,8 @@ int main(int argc, char **argv)
 		exit(4);
 	}
 
-    //load_clients();
-
+    load_clients();
+    print_clients();
 	while(1)
 	{
 		int numready;

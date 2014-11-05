@@ -23,7 +23,6 @@ LoginCommand::~LoginCommand()
 
 void LoginCommand::execute()
 {
-    std::cout << "erm" << std::endl;
     NetworkManager * nm = NetworkManager::get_instance();
     std::string id = _uname -> get_text();
     std::string password = _passwd -> get_text();

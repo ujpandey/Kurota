@@ -121,7 +121,8 @@ void TextBox::update()
         TextureManager * tm = TextureManager::get_instance();
         if (_password)
         {
-            std::string pwtext = _text.replace(_text.begin(), _text.end(), _text.size(), '*');
+            std::string pwtext = _text;
+            pwtext = pwtext.replace(pwtext.begin(), pwtext.end(), pwtext.size(), '*');
             tm -> load_text(pwtext, _id, _textcolor, Game::get_instance() -> get_renderer());
         }
         else
