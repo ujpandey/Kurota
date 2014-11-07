@@ -50,15 +50,12 @@ public:
     SDL_Renderer * get_renderer() const;
     TTF_Font * get_font() const;
 
-    const SDL_Rect * get_map_bounds() const;
-
 protected:
     Game();
     
 private:
     bool _running;
     SDL_Color clear_color;
-    SDL_Rect _map;
 //     int _fps;
 //     int _ticks_per_frame;
 //     Timer _timer;

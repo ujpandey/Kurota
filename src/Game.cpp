@@ -74,7 +74,7 @@ bool Game::init(const int & lib_flags,
         return false;
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);// | SDL_RENDERER_PRESENTVSYNC);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == NULL)
     {
         std::cerr << "Renderer not created: " << SDL_GetError() << std::endl;
@@ -93,12 +93,6 @@ bool Game::init(const int & lib_flags,
     }
 
     SDL_StartTextInput();
-
-    // init map here...
-    _map.x = 0;
-    _map.y = 0;
-    _map.w = 800;
-    _map.h = 500;
 
 //     _fps = 60;
 //     _ticks_per_frame = 1000 / _fps;
@@ -209,9 +203,4 @@ SDL_Renderer * Game::get_renderer() const
 TTF_Font * Game::get_font() const
 {
     return font;
-}
-
-const SDL_Rect * Game::get_map_bounds() const
-{
-    return &_map;
 }
