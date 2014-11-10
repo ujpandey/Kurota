@@ -40,10 +40,11 @@ class Cell : public GameObject
 public:
     Cell(const std::string & id,
          const std::string & tileset_id,
-         const int & x, const int & y, const int & w, const int & h,
+         const int & x=0, const int & y=0,
+         const int & w=64, const int & h=64,
          const int & width=64,
-         const int & row=0,
          const int & col=0,
+         const int & row=0,
          const bool & empty=true,
          const bool & traversable=true);
     virtual ~Cell();
@@ -56,8 +57,10 @@ public:
 
     virtual void set_occupant(GameObject * g_o);
     virtual void release_occupant(GameObject * g_o);
-
+    virtual const std::vector< GameObject * > & get_occupants() const;
+    
     virtual void set_neighbor(Cell * neighbor);
+    virtual void release_neighbor(Cell * neighbor);
     virtual const std::vector< Cell * > & get_neighbors() const;
 
 protected:
@@ -74,6 +77,10 @@ class Map : public GameObject
 {
 public:
     Map(const std::string & id,
+        const std::string & tileset_id,
+        const int & width=640,
+        const int & num_cols=10,
+        const int & num_rows=10
         );
     virtual ~Map();
     
@@ -85,7 +92,10 @@ public:
 
     virtual void generate();
 
-    std::vector< std::vector< Cell * > * > rows;
+    std::string _id;
+    std::string _tileset_id;
+    int _width, _num_cols, _num_rows, _cell_width;
+    std::vector< std::vector< Cell * > * > _rows;
 };
 
 #endif
