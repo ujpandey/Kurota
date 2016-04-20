@@ -62,13 +62,15 @@ void Player::on_mouse_button_down()
 {
     vec2d _mouse_position = EventManager::get_instance() -> get_mouse_position();
     SDL_Point p = {_mouse_position.get_x(), _mouse_position.get_y()};
-    if (SDL_PointInRect(&p, Game::get_instance() -> get_map_bounds()))
-    {
-        _target_position = _mouse_position;
-        _moving = true;
-    }
-    else
-        _successor -> on_mouse_button_down();
+    _target_position = _mouse_position;
+    _moving = true;
+    // if (SDL_PointInRect(&p, Game::get_instance() -> get_map_bounds()))
+    // {
+    //     _target_position = _mouse_position;
+    //     _moving = true;
+    // }
+    // else
+    //     _successor -> on_mouse_button_down();
 }
 
 void Player::respawn()

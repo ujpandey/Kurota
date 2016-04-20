@@ -144,7 +144,7 @@ PlayState::PlayState(const std::string & id)
 
 void PlayState::on_entry()
 {
-    Map * map = new Map;
+    // Map * map = new Map;
     std::cout << "Beginning play" << std::endl;
     Border * Chat_dbox_brdr = new Border("Chat_dbox_brdr",
                                            4, 0, 64, 71, 255);
